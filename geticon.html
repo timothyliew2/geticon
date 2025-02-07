@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图标获取器</title>
+    <style>
+        :root {
+            --primary-color: #007AFF;
+            --primary-hover: #0056b3;
+            --secondary-color: #64748b;
+            --secondary-hover: #475569;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --border-color: #e2e8f0;
+            --text-color: #1e293b;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        
+        .container {
+            background-color: var(--card-background);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        
+        .toggle-btn {
+            padding: 10px 24px;
+            border: 1.5px solid var(--primary-color);
+            background-color: transparent;
+            color: var(--primary-color);
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .toggle-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .toggle-btn:hover:not(.active) {
+            background-color: rgba(0, 122, 255, 0.1);
+            border-color: var(--primary-color);
+        }
+        
+        .filter-container {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .filter-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .size-select {
+            padding: 6px 24px 6px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-color);
+            background-color: white;
+            margin-right: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007AFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 8px;
+            width: 100px;
+        }
+
+        .size-select:hover {
+            border-color: var(--primary-color);
+        }
+
+        .size-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        button {
+            padding: 6px 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+        }
+        
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .favicon {
+            max-width: 128px;
+            margin: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .sizes {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .size-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8fafc;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin: 8px auto;
+            transition: all 0.2s ease;
+            width: fit-content;
+        }
+
+        .size-container:hover {
+            border-color: var(--primary-color);
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .error {
+            color: #ef4444;
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fef2f2;
+            border-radius: 6px;
+            border: 1px solid #fee2e2;
+        }
+        
+        .app-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .load-more {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .load-more button {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1.5px solid var(--primary-color);
+            padding: 8px 24px;
+        }
+
+        .load-more button:hover {
+            background-color: rgba(0, 122, 255, 0.1);
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .app-card {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            background-color: white;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .app-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+        
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            border-radius: 12px;
+        }
+        
+        .app-name {
+            font-weight: 600;
+            margin: 8px 0;
+            color: var(--text-color);
+            font-size: 14px;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .download-btn {
+            background-color: var(--secondary-color);
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .download-btn:hover {
+            background-color: var(--secondary-hover);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>图标获取器</h1>
+        <div class="toggle-container">
+            <button class="toggle-btn active" onclick="switchMode('web')" id="webBtn">网页应用</button>
+            <button class="toggle-btn" onclick="switchMode('app')" id="appBtn">App</button>
+        </div>
+        
+        <div class="filter-container">
+            <label class="filter-label">选择图标尺寸:</label>
+            <select class="size-select" id="sizeFilter" onchange="updateResults()">
+                <option value="all">显示所有尺寸</option>
+                <!-- 动态填充选项 -->
+            </select>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="请输入网址 (例如: google.com)" />
+            <button onclick="search()" id="searchBtn">获取图标</button>
+        </div>
+        
+        <div id="error" class="error"></div>
+        <div id="result" class="result">
+            <h2>获取结果</h2>
+            <div id="faviconContainer" class="sizes"></div>
+            <div id="appContainer" class="app-results"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'web';
+        const webSizes = [16, 32, 48, 128];
+        const appSizes = [60, 100, 512, 1024];
+        let currentResults = [];
+
+        function updateSizeFilter() {
+            const sizeFilter = document.getElementById('sizeFilter');
+            sizeFilter.innerHTML = '<option value="all">显示所有尺寸</option>';
+            
+            const sizes = currentMode === 'web' ? webSizes : appSizes;
+            sizes.forEach(size => {
+                const option = document.createElement('option');
+                option.value = size;
+                option.textContent = `${size}x${size}`;
+                sizeFilter.appendChild(option);
+            });
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            const urlInput = document.getElementById('urlInput');
+            const webBtn = document.getElementById('webBtn');
+            const appBtn = document.getElementById('appBtn');
+            const searchBtn = document.getElementById('searchBtn');
+            const result = document.getElementById('result');
+            const error = document.getElementById('error');
+
+            result.style.display = 'none';
+            error.style.display = 'none';
+            
+            if (mode === 'web') {
+                webBtn.classList.add('active');
+                appBtn.classList.remove('active');
+                urlInput.placeholder = '请输入网址 (例如: google.com)';
+                searchBtn.textContent = '获取图标';
+            } else {
+                webBtn.classList.remove('active');
+                appBtn.classList.add('active');
+                urlInput.placeholder = '请输入App名称 (例如: Facebook)';
+                searchBtn.textContent = '搜索App';
+            }
+            
+            updateSizeFilter();
+            urlInput.value = '';
+        }
+
+        function updateResults() {
+            const selectedSize = document.getElementById('sizeFilter').value;
+            const faviconContainer = document.getElementById('faviconContainer');
+            const appContainer = document.getElementById('appContainer');
+
+            if (currentMode === 'web') {
+                faviconContainer.innerHTML = '';
+                const sizes = selectedSize === 'all' ? webSizes : [parseInt(selectedSize)];
+                
+                sizes.forEach(size => {
+                    const url = document.getElementById('urlInput').value.trim();
+                    if (!url) return;
+
+                    const container = document.createElement('div');
+                    container.className = 'size-container';
+                    
+                    const img = document.createElement('img');
+                    img.className = 'favicon';
+                    img.src = `https://www.google.com/s2/favicons?domain=${url}&sz=${size}`;
+                    
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.className = 'download-btn';
+                    downloadBtn.textContent = `下载 ${size}x${size}`;
+                    downloadBtn.onclick = () => downloadFavicon(img.src, `favicon-${size}.png`);
+                    
+                    container.appendChild(img);
+                    container.appendChild(document.createElement('br'));
+                    container.appendChild(downloadBtn);
+                    
+                    faviconContainer.appendChild(container);
+                });
+            } else {
+                if (!currentResults.length) return;
+                
+                appContainer.innerHTML = '';
+                currentResults.forEach(app => {
+                    const selectedSizeUrl = selectedSize === 'all' ? 
+                        app.artworkUrl512 || app.artworkUrl100 :
+                        app[`artworkUrl${selectedSize}`] || app.artworkUrl100;
+
+                    const appCard = document.createElement('div');
+                    appCard.className = 'app-card';
+
+                    const img = document.createElement('img');
+                    img.src = selectedSizeUrl;
+                    img.className = 'app-icon';
+
+                    const name = document.createElement('div');
+                    name.className = 'app-name';
+                    name.textContent = app.trackName;
+
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.className = 'download-btn';
+                    downloadBtn.textContent = '下载图标';
+                    downloadBtn.onclick = () => downloadFavicon(selectedSizeUrl, `${app.trackName}-icon.png`);
+
+                    appCard.appendChild(img);
+                    appCard.appendChild(name);
+                    appCard.appendChild(downloadBtn);
+
+                    appContainer.appendChild(appCard);
+                });
+            }
+        }
+
+        function search() {
+            if (currentMode === 'web') {
+                getFavicon();
+            } else {
+                searchApp();
+            }
+        }
+
+        function getFavicon() {
+            const urlInput = document.getElementById('urlInput');
+            const result = document.getElementById('result');
+            const error = document.getElementById('error');
+            const faviconContainer = document.getElementById('faviconContainer');
+            const appContainer = document.getElementById('appContainer');
+            
+            faviconContainer.innerHTML = '';
+            appContainer.innerHTML = '';
+            error.style.display = 'none';
+            
+            let url = urlInput.value.trim();
+            
+            if (!url) {
+                error.textContent = '请输入有效的网址';
+                error.style.display = 'block';
+                return;
+            }
+            
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            
+            try {
+                new URL(url);
+            } catch (e) {
+                error.textContent = '请输入有效的网址';
+                error.style.display = 'block';
+                return;
+            }
+            
+            updateResults();
+            
+            faviconContainer.style.display = 'flex';
+            appContainer.style.display = 'none';
+            result.style.display = 'block';
+        }
+
+        let currentPage = 1;
+        let currentQuery = '';
+        let isLoading = false;
+        let hasMoreResults = true;
+
+        async function searchApp(loadMore = false) {
+            const query = document.getElementById('urlInput').value.trim();
+            const result = document.getElementById('result');
+            const error = document.getElementById('error');
+            const faviconContainer = document.getElementById('faviconContainer');
+            const appContainer = document.getElementById('appContainer');
+
+            if (!loadMore) {
+                if (!query) {
+                    error.textContent = '请输入App名称';
+                    error.style.display = 'block';
+                    return;
+                }
+                currentPage = 1;
+                currentQuery = query;
+                faviconContainer.innerHTML = '';
+                appContainer.innerHTML = '';
+                error.style.display = 'none';
+                hasMoreResults = true;
+            }
+
+            if (!hasMoreResults || isLoading) return;
+            isLoading = true;
+
+            try {
+                const cnUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(currentQuery)}&entity=software&limit=10&country=cn&lang=zh&offset=${(currentPage - 1) * 10}`;
+                const cnResponse = await fetch(cnUrl);
+                const cnData = await cnResponse.json();
+
+                let globalData = { results: [] };
+                if (cnData.results.length < 10) {
+                    const globalUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(currentQuery)}&entity=software&limit=${10 - cnData.results.length}&country=us&offset=${(currentPage - 1) * 10}`;
+                    const globalResponse = await fetch(globalUrl);
+                    globalData = await globalResponse.json();
+                }
+
+                const results = [...cnData.results, ...globalData.results];
+
+                if (results.length === 0 && currentPage === 1) {
+                    error.textContent = '未找到相关App';
+                    error.style.display = 'block';
+                    return;
+                }
+
+                hasMoreResults = results.length === 10;
+
+                results.forEach(app => {
+                    const appCard = document.createElement('div');
+                    appCard.className = 'app-card';
+                    
+                    const iconUrl = app.artworkUrl512 || app.artworkUrl100;
+                    appCard.innerHTML = `
+                        <img src="${iconUrl}" class="app-icon" alt="${app.trackName}">
+                        <div class="app-name">${app.trackName}</div>
+                        <div class="size-container">
+                            <select class="size-select">
+                                <option value="256">256x256</option>
+                                <option value="512">512x512</option>
+                                <option value="1024" selected>1024x1024</option>
+                            </select>
+                            <button onclick="downloadFavicon('${iconUrl}', '${app.trackName}')">下载</button>
+                        </div>
+                    `;
+                    
+                    appContainer.appendChild(appCard);
+                });
+
+                let loadMoreContainer = document.querySelector('.load-more');
+                if (!loadMoreContainer) {
+                    loadMoreContainer = document.createElement('div');
+                    loadMoreContainer.className = 'load-more';
+                    appContainer.appendChild(loadMoreContainer);
+                }
+
+                loadMoreContainer.innerHTML = hasMoreResults ? 
+                    '<button onclick="searchApp(true)">加载更多</button>' : 
+                    '<p style="color: var(--secondary-color);">没有更多结果了</p>';
+
+                faviconContainer.style.display = 'none';
+                appContainer.style.display = 'grid';
+                result.style.display = 'block';
+
+                if (loadMore) {
+                    currentPage++;
+                }
+            } catch (err) {
+                console.error(err);
+                error.textContent = '搜索失败，请重试';
+                error.style.display = 'block';
+            } finally {
+                isLoading = false;
+            }
+        }
+        
+        function downloadFavicon(url, filename) {
+            const sizeSelect = event.target.closest('.size-container').querySelector('.size-select');
+            const size = parseInt(sizeSelect.value);
+            
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const img = new Image();
+                    img.src = URL.createObjectURL(blob);
+                    
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        canvas.width = size;
+                        canvas.height = size;
+                        
+                        // 绘制iOS风格的圆角矩形
+                        ctx.beginPath();
+                        const radius = size * 0.225; // iOS风格的圆角比例
+                        ctx.moveTo(size, size - radius);
+                        ctx.quadraticCurveTo(size, size, size - radius, size);
+                        ctx.lineTo(radius, size);
+                        ctx.quadraticCurveTo(0, size, 0, size - radius);
+                        ctx.lineTo(0, radius);
+                        ctx.quadraticCurveTo(0, 0, radius, 0);
+                        ctx.lineTo(size - radius, 0);
+                        ctx.quadraticCurveTo(size, 0, size, radius);
+                        ctx.closePath();
+                        ctx.clip();
+                        
+                        // 绘制图片
+                        ctx.drawImage(img, 0, 0, size, size);
+                        
+                        canvas.toBlob((blob) => {
+                            const downloadUrl = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = downloadUrl;
+                            a.download = `${filename}_${size}x${size}.png`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(downloadUrl);
+                        }, 'image/png');
+                    };
+                })
+                .catch(error => {
+                    console.error('下载失败:', error);
+                    alert('下载失败，请重试');
+                });
+        }
+
+        // 初始化尺寸筛选器
+        updateSizeFilter();
+    </script>
+</body>
+</html>
