@@ -3,7 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Icon Fetcher | 图标获取器</title>
+    <title>Icon Fetcher | 图标获取器 - 获取网站图标和App图标</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="免费的网站图标和App图标获取工具。轻松获取任何网站的favicon图标和iOS/Android应用的图标。Free tool to fetch website favicons and app icons. Easily download icons from any website or iOS/Android apps.">
+    <meta name="keywords" content="favicon,icon,app icon,图标下载,图标获取,favicon下载,app图标下载">
+    <meta name="author" content="Icon Fetcher">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Icon Fetcher | 图标获取器">
+    <meta property="og:description" content="免费的网站图标和App图标获取工具。Free tool to fetch website favicons and app icons.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:locale:alternate" content="en_US">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Icon Fetcher | 图标获取器">
+    <meta name="twitter:description" content="免费的网站图标和App图标获取工具。Free tool to fetch website favicons and app icons.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Mobile Web App -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Icon Fetcher">
+    
+    <!-- Schema.org markup for Google+ -->
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebApplication",
+      "name": "Icon Fetcher",
+      "description": "免费的网站图标和App图标获取工具。Free tool to fetch website favicons and app icons.",
+      "url": "https://iconfetcher.com",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SCJ74BPRB7"></script>
@@ -422,33 +466,36 @@
     </script>
 </head>
 <body>
-    <button class="lang-switch" onclick="switchLanguage()">English</button>
-    <div class="container">
-        <h1 id="mainTitle">图标获取器</h1>
-        <div class="toggle-container">
-            <button class="toggle-btn active" onclick="switchMode('web')" id="webBtn">网页应用</button>
-            <button class="toggle-btn" onclick="switchMode('app')" id="appBtn">App图标</button>
-        </div>
+    <nav role="navigation" aria-label="Language selection">
+        <button class="lang-switch" onclick="switchLanguage()" aria-label="Switch language">English</button>
+    </nav>
+    <main role="main" class="container">
+        <h1 id="mainTitle" aria-label="Icon Fetcher">图标获取器</h1>
+        <nav class="toggle-container" role="tablist" aria-label="Select icon type">
+            <button class="toggle-btn active" onclick="switchMode('web')" id="webBtn" role="tab" aria-selected="true" aria-controls="webSection">网页应用</button>
+            <button class="toggle-btn" onclick="switchMode('app')" id="appBtn" role="tab" aria-selected="false" aria-controls="appSection">App图标</button>
+        </nav>
         
-        <div class="filter-container">
+        <div class="filter-container" role="group" aria-labelledby="sizeLabel">
             <label class="filter-label" for="sizeFilter" id="sizeLabel">尺寸:</label>
-            <select class="size-select" id="sizeFilter" onchange="updateResults()">
+            <select class="size-select" id="sizeFilter" onchange="updateResults()" aria-label="Select icon size">
                 <option value="all">显示所有尺寸</option>
                 <!-- 动态填充选项 -->
             </select>
         </div>
 
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="请输入网址 (例如: google.com)" />
-            <button onclick="search()" id="searchBtn">获取图标</button>
+        <div class="input-group" role="search">
+            <input type="text" id="urlInput" placeholder="请输入网址 (例如: google.com)" aria-label="Enter website URL or app name" />
+            <button onclick="search()" id="searchBtn" aria-label="Search for icons">获取图标</button>
         </div>
         
-        <div id="error" class="error"></div>
-        <div id="result" class="result">
+        <div id="error" class="error" role="alert" aria-live="polite"></div>
+        <section id="result" class="result" aria-live="polite">
             <h2 id="resultsTitle">获取结果</h2>
-            <div id="faviconContainer" class="sizes"></div>
-            <div id="appContainer" class="app-results"></div>
-        </div>
+            <div id="faviconContainer" class="sizes" role="list" aria-label="Website icons"></div>
+            <div id="appContainer" class="app-results" role="list" aria-label="App icons"></div>
+        </section>
+    </main>
     </div>
 
     <script>
