@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图标获取器</title>
+    <title>Icon Fetcher | 图标获取器</title>
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SCJ74BPRB7"></script>
@@ -15,6 +15,25 @@
       gtag('config', 'G-SCJ74BPRB7');
     </script>
     <style>
+        /* 添加语言切换按钮样式 */
+        .lang-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-switch:hover {
+            background: var(--primary-hover);
+        }
+
         :root {
             --primary-color: #007AFF;
             --primary-hover: #0056b3;
@@ -294,17 +313,125 @@
             background-color: var(--secondary-hover);
         }
     </style>
+    <script>
+        // 语言配置
+        const translations = {
+            'zh-CN': {
+                title: '图标获取器',
+                webMode: '网页应用',
+                appMode: 'App图标',
+                inputPlaceholder: '输入网址，如：google.com',
+                searchPlaceholder: '搜索App名称',
+                downloadBtn: '下载',
+                errorMsg: '请输入有效的网址',
+                downloadFailed: '下载失败，请重试',
+                searchError: '搜索失败，请重试',
+                noResults: '没有找到相关结果',
+                loadMore: '加载更多',
+                switchToEnglish: 'English',
+                search: '搜索',
+                size: '尺寸',
+                all: '全部',
+                results: '获取结果'
+            },
+            'en': {
+                title: 'Icon Fetcher',
+                webMode: 'Web App',
+                appMode: 'App Icon',
+                inputPlaceholder: 'Enter URL, e.g. google.com',
+                searchPlaceholder: 'Search App name',
+                downloadBtn: 'Download',
+                errorMsg: 'Please enter a valid URL',
+                downloadFailed: 'Download failed, please try again',
+                searchError: 'Search failed, please try again',
+                noResults: 'No results found',
+                loadMore: 'Load More',
+                switchToChinese: '中文',
+                search: 'Search',
+                size: 'Size',
+                all: 'All',
+                results: 'Results'
+            }
+        };
+
+        // 获取浏览器语言
+        let currentLang = (navigator.language || navigator.userLanguage).startsWith('zh') ? 'zh-CN' : 'en';
+
+        // 翻译函数
+        function t(key) {
+            return translations[currentLang][key] || translations['en'][key];
+        }
+
+        // 语言切换函数
+        function switchLanguage() {
+            currentLang = currentLang === 'zh-CN' ? 'en' : 'zh-CN';
+            updateUILanguage();
+            // 更新语言切换按钮文本
+            document.querySelector('.lang-switch').textContent = currentLang === 'zh-CN' ? t('switchToEnglish') : t('switchToChinese');
+        }
+
+        // 更新UI语言
+        function updateUILanguage() {
+            // 更新标题
+            document.title = currentLang === 'zh-CN' ? 'Icon Fetcher | 图标获取器' : 'Icon Fetcher';
+            document.getElementById('mainTitle').textContent = t('title');
+            
+            // 更新模式按钮
+            document.getElementById('webBtn').textContent = t('webMode');
+            document.getElementById('appBtn').textContent = t('appMode');
+            
+            // 更新输入框placeholder
+            const urlInput = document.getElementById('urlInput');
+            if (urlInput) urlInput.placeholder = t('inputPlaceholder');
+            
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.placeholder = t('searchPlaceholder');
+            
+            // 更新搜索按钮
+            const searchBtn = document.querySelector('button[onclick="search()"]');
+            if (searchBtn) searchBtn.textContent = t('search');
+            
+            // 更新尺寸筛选器文本
+            const sizeLabel = document.querySelector('label[for="sizeFilter"]');
+            if (sizeLabel) sizeLabel.textContent = t('size') + ':';
+            
+            const allOption = document.querySelector('option[value="all"]');
+            if (allOption) allOption.textContent = t('all');
+            
+            // 更新错误消息
+            const error = document.getElementById('error');
+            if (error && error.style.display === 'block') {
+                error.textContent = t('errorMsg');
+            }
+            
+            // 更新语言切换按钮
+            document.querySelector('.lang-switch').textContent = 
+                currentLang === 'zh-CN' ? t('switchToEnglish') : t('switchToChinese');
+            
+            // 更新结果标题
+            const resultsTitle = document.getElementById('resultsTitle');
+            if (resultsTitle) {
+                resultsTitle.textContent = t('results');
+            }
+
+            // 重新渲染当前结果
+            if (currentMode === 'web') {
+                updateResults();
+            }
+        }
+    </script>
 </head>
 <body>
+    <button class="lang-switch" onclick="switchLanguage()">English</button>
     <div class="container">
-        <h1>图标获取器</h1>
+        <h1 id="mainTitle">图标获取器</h1>
         <div class="toggle-container">
             <button class="toggle-btn active" onclick="switchMode('web')" id="webBtn">网页应用</button>
-            <button class="toggle-btn" onclick="switchMode('app')" id="appBtn">App</button>
+            <button class="toggle-btn" onclick="switchMode('app')" id="appBtn">App图标</button>
         </div>
         
         <div class="filter-container">
-            <label class="filter-label">选择图标尺寸:</label>
+            <label class="filter-label" for="sizeFilter" id="sizeLabel">尺寸:</label>
             <select class="size-select" id="sizeFilter" onchange="updateResults()">
                 <option value="all">显示所有尺寸</option>
                 <!-- 动态填充选项 -->
@@ -318,7 +445,7 @@
         
         <div id="error" class="error"></div>
         <div id="result" class="result">
-            <h2>获取结果</h2>
+            <h2 id="resultsTitle">获取结果</h2>
             <div id="faviconContainer" class="sizes"></div>
             <div id="appContainer" class="app-results"></div>
         </div>
@@ -327,12 +454,12 @@
     <script>
         let currentMode = 'web';
         const webSizes = [16, 32, 48, 128];
-        const appSizes = [60, 100, 512, 1024];
+        const appSizes = [256, 512, 1024];
         let currentResults = [];
 
         function updateSizeFilter() {
             const sizeFilter = document.getElementById('sizeFilter');
-            sizeFilter.innerHTML = '<option value="all">显示所有尺寸</option>';
+            sizeFilter.innerHTML = `<option value="all">${t('all')}</option>`;
             
             const sizes = currentMode === 'web' ? webSizes : appSizes;
             sizes.forEach(size => {
@@ -341,6 +468,12 @@
                 option.textContent = `${size}x${size}`;
                 sizeFilter.appendChild(option);
             });
+            
+            // 更新尺寸标签
+            const sizeLabel = document.querySelector('label[for="sizeFilter"]');
+            if (sizeLabel) {
+                sizeLabel.textContent = t('size') + ':';
+            }
         }
 
         function switchMode(mode) {
@@ -358,13 +491,13 @@
             if (mode === 'web') {
                 webBtn.classList.add('active');
                 appBtn.classList.remove('active');
-                urlInput.placeholder = '请输入网址 (例如: google.com)';
-                searchBtn.textContent = '获取图标';
+                urlInput.placeholder = t('inputPlaceholder');
+                searchBtn.textContent = t('search');
             } else {
                 webBtn.classList.remove('active');
                 appBtn.classList.add('active');
-                urlInput.placeholder = '请输入App名称 (例如: Facebook)';
-                searchBtn.textContent = '搜索App';
+                urlInput.placeholder = t('searchPlaceholder');
+                searchBtn.textContent = t('search');
             }
             
             updateSizeFilter();
@@ -398,7 +531,7 @@
                     
                     const downloadBtn = document.createElement('button');
                     downloadBtn.className = 'download-btn';
-                    downloadBtn.textContent = `下载 ${size}x${size}`;
+                    downloadBtn.textContent = `${t('downloadBtn')} ${size}x${size}`;
                     downloadBtn.onclick = async function() {
                         try {
                             const response = await fetch(proxyUrl);
@@ -415,7 +548,7 @@
                             URL.revokeObjectURL(url);
                         } catch (error) {
                             console.error('下载失败:', error);
-                            alert('下载失败，请重试');
+                            alert(t('downloadFailed'));
                         }
                     };
                     
@@ -481,7 +614,7 @@
             let url = urlInput.value.trim();
             
             if (!url) {
-                error.textContent = '请输入有效的网址';
+                error.textContent = t('errorMsg');
                 error.style.display = 'block';
                 return;
             }
@@ -493,7 +626,7 @@
                 // 添加https://前缀进行验证
                 new URL('https://' + url);
             } catch (e) {
-                error.textContent = '请输入有效的网址';
+                error.textContent = t('errorMsg');
                 error.style.display = 'block';
                 return;
             }
@@ -535,30 +668,52 @@
             isLoading = true;
 
             try {
-                const cnUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(currentQuery)}&entity=software&limit=10&country=cn&lang=zh&offset=${(currentPage - 1) * 10}`;
-                const cnResponse = await fetch(cnUrl);
-                const cnData = await cnResponse.json();
+                // 根据当前语言决定优先搜索的区域
+                const isPrimaryUS = currentLang === 'en';
+                const primaryCountry = isPrimaryUS ? 'us' : 'cn';
+                const secondaryCountry = isPrimaryUS ? 'cn' : 'us';
+                const primaryLang = isPrimaryUS ? 'en' : 'zh';
 
-                let globalData = { results: [] };
-                if (cnData.results.length < 10) {
-                    const globalUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(currentQuery)}&entity=software&limit=${10 - cnData.results.length}&country=us&offset=${(currentPage - 1) * 10}`;
-                    const globalResponse = await fetch(globalUrl);
-                    globalData = await globalResponse.json();
+                // 优先区域搜索
+                const primaryUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(currentQuery)}&entity=software&limit=9&country=${primaryCountry}&lang=${primaryLang}&offset=${(currentPage - 1) * 9}`;
+                const primaryResponse = await fetch(primaryUrl);
+                const primaryData = await primaryResponse.json();
+
+                let secondaryData = { results: [] };
+                if (primaryData.results.length < 9) {
+                    // 如果优先区域的结果不足，搜索次要区域
+                    const secondaryUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(currentQuery)}&entity=software&limit=${9 - primaryData.results.length}&country=${secondaryCountry}&offset=${(currentPage - 1) * 9}`;
+                    const secondaryResponse = await fetch(secondaryUrl);
+                    secondaryData = await secondaryResponse.json();
                 }
 
-                const results = [...cnData.results, ...globalData.results];
+                const results = [...primaryData.results, ...secondaryData.results];
 
                 if (results.length === 0 && currentPage === 1) {
-                    error.textContent = '未找到相关App';
+                    error.textContent = t('noResults');
                     error.style.display = 'block';
                     return;
                 }
 
-                hasMoreResults = results.length === 10;
+                hasMoreResults = results.length === 9;
 
-                results.forEach(app => {
+                // 移除旧的加载更多按钮
+                const oldLoadMoreBtn = document.querySelector('.load-more');
+                if (oldLoadMoreBtn) {
+                    oldLoadMoreBtn.remove();
+                }
+
+                // 过滤掉已经显示过的应用
+                const newResults = results.filter(app => 
+                    !Array.from(appContainer.querySelectorAll('.app-card')).some(card => 
+                        card.dataset.appId === app.trackId.toString()
+                    )
+                );
+
+                newResults.forEach(app => {
                     const appCard = document.createElement('div');
                     appCard.className = 'app-card';
+                    appCard.dataset.appId = app.trackId.toString();
                     
                     const iconUrl = app.artworkUrl512 || app.artworkUrl100;
                     const proxyIconUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(iconUrl)}`;
@@ -584,7 +739,7 @@
                     `;
                     
                     const downloadBtn = document.createElement('button');
-                    downloadBtn.textContent = '下载';
+                    downloadBtn.textContent = t('downloadBtn');
                     downloadBtn.onclick = async function() {
                         try {
                             const response = await fetch(proxyIconUrl);
@@ -601,7 +756,7 @@
                             URL.revokeObjectURL(url);
                         } catch (error) {
                             console.error('下载失败:', error);
-                            alert('下载失败，请重试');
+                            alert(t('downloadFailed'));
                         }
                     };
                     
@@ -615,16 +770,16 @@
                     appContainer.appendChild(appCard);
                 });
 
-                let loadMoreContainer = document.querySelector('.load-more');
-                if (!loadMoreContainer) {
-                    loadMoreContainer = document.createElement('div');
+                // 创建新的加载更多按钮
+                if (hasMoreResults) {
+                    const loadMoreContainer = document.createElement('div');
                     loadMoreContainer.className = 'load-more';
+                    const loadMoreBtn = document.createElement('button');
+                    loadMoreBtn.onclick = () => searchApp(true);
+                    loadMoreBtn.textContent = t('loadMore');
+                    loadMoreContainer.appendChild(loadMoreBtn);
                     appContainer.appendChild(loadMoreContainer);
                 }
-
-                loadMoreContainer.innerHTML = hasMoreResults ? 
-                    '<button onclick="searchApp(true)">加载更多</button>' : 
-                    '<p style="color: var(--secondary-color);">没有更多结果了</p>';
 
                 faviconContainer.style.display = 'none';
                 appContainer.style.display = 'grid';
@@ -635,7 +790,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                error.textContent = '搜索失败，请重试';
+                error.textContent = t('searchError');
                 error.style.display = 'block';
             } finally {
                 isLoading = false;
@@ -688,6 +843,13 @@
 
         // 初始化尺寸筛选器
         updateSizeFilter();
+
+        // 初始化语言
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUILanguage();
+            // 设置初始语言切换按钮文本
+            document.querySelector('.lang-switch').textContent = currentLang === 'zh-CN' ? 'English' : '中文';
+        });
     </script>
 </body>
 </html>
