@@ -381,8 +381,11 @@
                 const sizes = selectedSize === 'all' ? webSizes : [parseInt(selectedSize)];
                 
                 sizes.forEach(size => {
-                    const url = document.getElementById('urlInput').value.trim();
+                    let url = document.getElementById('urlInput').value.trim();
                     if (!url) return;
+
+                    // 处理URL，移除可能的http://或https://前缀
+                    url = url.replace(/^https?:\/\//i, '');
 
                     const container = document.createElement('div');
                     container.className = 'size-container';
@@ -483,12 +486,12 @@
                 return;
             }
             
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
+            // 处理URL，移除可能的http://或https://前缀
+            url = url.replace(/^https?:\/\//i, '');
             
             try {
-                new URL(url);
+                // 添加https://前缀进行验证
+                new URL('https://' + url);
             } catch (e) {
                 error.textContent = '请输入有效的网址';
                 error.style.display = 'block';
