@@ -379,29 +379,31 @@
                     
                     const img = document.createElement('img');
                     img.className = 'favicon';
-                    const faviconUrl = `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent('https://' + url)}&size=${size}`;
-                    img.src = faviconUrl;
+                    const originalUrl = `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent('https://' + url)}&size=${size}`;
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(originalUrl)}`;
+                    img.src = proxyUrl;
                     
                     const downloadBtn = document.createElement('button');
                     downloadBtn.className = 'download-btn';
                     downloadBtn.textContent = `下载 ${size}x${size}`;
-                    downloadBtn.onclick = function() {
-                        fetch(img.src)
-                            .then(response => response.blob())
-                            .then(blob => {
-                                const url = URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = `favicon-${size}.png`;
-                                document.body.appendChild(a);
-                                a.click();
-                                document.body.removeChild(a);
-                                URL.revokeObjectURL(url);
-                            })
-                            .catch(error => {
-                                console.error('下载失败:', error);
-                                alert('下载失败，请重试');
-                            });
+                    downloadBtn.onclick = async function() {
+                        try {
+                            const response = await fetch(proxyUrl);
+                            if (!response.ok) throw new Error('Network response was not ok');
+                            
+                            const blob = await response.blob();
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `favicon-${size}.png`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        } catch (error) {
+                            console.error('下载失败:', error);
+                            alert('下载失败，请重试');
+                        }
                     };
                     
                     container.appendChild(img);
