@@ -548,18 +548,56 @@
                     appCard.className = 'app-card';
                     
                     const iconUrl = app.artworkUrl512 || app.artworkUrl100;
-                    appCard.innerHTML = `
-                        <img src="${iconUrl}" class="app-icon" alt="${app.trackName}">
-                        <div class="app-name">${app.trackName}</div>
-                        <div class="size-container">
-                            <select class="size-select">
-                                <option value="256">256x256</option>
-                                <option value="512">512x512</option>
-                                <option value="1024" selected>1024x1024</option>
-                            </select>
-                            <button onclick="downloadFavicon('${iconUrl}', '${app.trackName}')">下载</button>
-                        </div>
+                    const proxyIconUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(iconUrl)}`;
+                    
+                    const img = document.createElement('img');
+                    img.src = proxyIconUrl;
+                    img.className = 'app-icon';
+                    img.alt = app.trackName;
+                    
+                    const nameDiv = document.createElement('div');
+                    nameDiv.className = 'app-name';
+                    nameDiv.textContent = app.trackName;
+                    
+                    const sizeContainer = document.createElement('div');
+                    sizeContainer.className = 'size-container';
+                    
+                    const sizeSelect = document.createElement('select');
+                    sizeSelect.className = 'size-select';
+                    sizeSelect.innerHTML = `
+                        <option value="256">256x256</option>
+                        <option value="512">512x512</option>
+                        <option value="1024" selected>1024x1024</option>
                     `;
+                    
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.textContent = '下载';
+                    downloadBtn.onclick = async function() {
+                        try {
+                            const response = await fetch(proxyIconUrl);
+                            if (!response.ok) throw new Error('Network response was not ok');
+                            
+                            const blob = await response.blob();
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `${app.trackName}_${sizeSelect.value}x${sizeSelect.value}.png`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        } catch (error) {
+                            console.error('下载失败:', error);
+                            alert('下载失败，请重试');
+                        }
+                    };
+                    
+                    sizeContainer.appendChild(sizeSelect);
+                    sizeContainer.appendChild(downloadBtn);
+                    
+                    appCard.appendChild(img);
+                    appCard.appendChild(nameDiv);
+                    appCard.appendChild(sizeContainer);
                     
                     appContainer.appendChild(appCard);
                 });
