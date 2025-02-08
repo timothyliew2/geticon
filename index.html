@@ -379,12 +379,30 @@
                     
                     const img = document.createElement('img');
                     img.className = 'favicon';
-                    img.src = `https://www.google.com/s2/favicons?domain=${url}&sz=${size}`;
+                    const faviconUrl = `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent('https://' + url)}&size=${size}`;
+                    img.src = faviconUrl;
                     
                     const downloadBtn = document.createElement('button');
                     downloadBtn.className = 'download-btn';
                     downloadBtn.textContent = `下载 ${size}x${size}`;
-                    downloadBtn.onclick = () => downloadFavicon(img.src, `favicon-${size}.png`);
+                    downloadBtn.onclick = function() {
+                        fetch(img.src)
+                            .then(response => response.blob())
+                            .then(blob => {
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `favicon-${size}.png`;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                            })
+                            .catch(error => {
+                                console.error('下载失败:', error);
+                                alert('下载失败，请重试');
+                            });
+                    };
                     
                     container.appendChild(img);
                     container.appendChild(document.createElement('br'));
@@ -572,55 +590,47 @@
         }
         
         function downloadFavicon(url, filename) {
-            const sizeSelect = event.target.closest('.size-container').querySelector('.size-select');
-            const size = parseInt(sizeSelect.value);
-            
-            fetch(url)
-                .then(response => response.blob())
-                .then(blob => {
-                    const img = new Image();
-                    img.src = URL.createObjectURL(blob);
-                    
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        
-                        canvas.width = size;
-                        canvas.height = size;
-                        
-                        // 绘制iOS风格的圆角矩形
-                        ctx.beginPath();
-                        const radius = size * 0.225; // iOS风格的圆角比例
-                        ctx.moveTo(size, size - radius);
-                        ctx.quadraticCurveTo(size, size, size - radius, size);
-                        ctx.lineTo(radius, size);
-                        ctx.quadraticCurveTo(0, size, 0, size - radius);
-                        ctx.lineTo(0, radius);
-                        ctx.quadraticCurveTo(0, 0, radius, 0);
-                        ctx.lineTo(size - radius, 0);
-                        ctx.quadraticCurveTo(size, 0, size, radius);
-                        ctx.closePath();
-                        ctx.clip();
-                        
-                        // 绘制图片
-                        ctx.drawImage(img, 0, 0, size, size);
-                        
-                        canvas.toBlob((blob) => {
-                            const downloadUrl = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = downloadUrl;
-                            a.download = `${filename}_${size}x${size}.png`;
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                            URL.revokeObjectURL(downloadUrl);
-                        }, 'image/png');
-                    };
-                })
-                .catch(error => {
-                    console.error('下载失败:', error);
-                    alert('下载失败，请重试');
-                });
+            let size;
+            const sizeSelect = event.target.closest('.size-container')?.querySelector('.size-select');
+            if (sizeSelect) {
+                size = parseInt(sizeSelect.value);
+            } else {
+                // 对于网页图标，从URL中提取尺寸
+                const sizeMatch = url.match(/sz=(\d+)/);
+                size = sizeMatch ? parseInt(sizeMatch[1]) : 32;
+            }
+
+            // 创建一个新的图片元素来加载图标
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = url;
+
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = size;
+                canvas.height = size;
+
+                // 绘制图片
+                ctx.drawImage(img, 0, 0, size, size);
+
+                // 将canvas转换为blob并下载
+                canvas.toBlob(function(blob) {
+                    const downloadUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = filename || 'favicon.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(downloadUrl);
+                }, 'image/png');
+            };
+
+            img.onerror = function() {
+                console.error('图片加载失败');
+                alert('下载失败，请重试');
+            };
         }
 
         // 初始化尺寸筛选器
