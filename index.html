@@ -27,6 +27,7 @@
     <meta name="twitter:description" content="免费的网站图标和App图标获取工具。Free tool to fetch website favicons and app icons.">
     
     <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="shortcut icon" href="favicon.ico">
@@ -134,6 +135,26 @@
             display: flex;
             gap: 10px;
             z-index: 1000;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .nav-buttons {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: flex-end;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(10px);
+                margin-bottom: 10px;
+            }
+
+            .community-btn,
+            .lang-switch {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
         }
 
         .community-btn,
@@ -900,7 +921,7 @@
         
         <div id="error" class="error" role="alert" aria-live="polite"></div>
         <section id="result" class="result" aria-live="polite">
-            <h2 id="resultsTitle">获取结果</h2>
+            <h2 id="resultsTitle" style="display: none;"></h2>
             <div id="faviconContainer" class="sizes" role="list" aria-label="Website icons"></div>
             <div id="appContainer" class="app-results" role="list" aria-label="App icons"></div>
         </section>
@@ -1092,6 +1113,11 @@
             
             updateResults();
             
+            // 显示结果标题
+            const resultsTitle = document.getElementById('resultsTitle');
+            resultsTitle.style.display = 'block';
+            resultsTitle.textContent = t('results');
+            
             faviconContainer.style.display = 'flex';
             faviconContainer.style.justifyContent = 'center';
             faviconContainer.style.gap = '40px';
@@ -1125,6 +1151,11 @@
             appContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
             appContainer.style.gap = '20px';
             result.style.display = 'block';
+            
+            // 显示结果标题
+            const resultsTitle = document.getElementById('resultsTitle');
+            resultsTitle.style.display = 'block';
+            resultsTitle.textContent = t('results');
 
 
 
