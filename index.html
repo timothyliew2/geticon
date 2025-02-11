@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Icon Fetcher | 图标获取器 - 获取网站图标和App图标</title>
-
-     <!-- Google AdSense -->
+    
+    <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3569373007781002" crossorigin="anonymous"></script>
     
     <!-- SEO Meta Tags -->
@@ -27,7 +27,19 @@
     <meta name="twitter:description" content="免费的网站图标和App图标获取工具。Free tool to fetch website favicons and app icons.">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    
+    <!-- Android Chrome -->
+    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="site.webmanifest">
     
     <!-- Mobile Web App -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -129,8 +141,6 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: var(--primary-color);
-            color: white;
             border: none;
             padding: 8px 16px;
             border-radius: 20px;
@@ -142,6 +152,11 @@
         .community-btn:hover,
         .lang-switch:hover {
             background: var(--primary-hover);
+        }
+
+        .lang-switch {
+            background: var(--primary-color);
+            color: white;
         }
 
         .modal {
