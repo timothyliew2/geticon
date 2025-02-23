@@ -76,13 +76,22 @@
     </script>
     <style>
         :root {
+            /* 添加导航栏相关变量 */
+            --nav-height: 60px;
+            --nav-background: rgba(255, 255, 255, 0.95);
+            --dropdown-background: white;
+            /* 主要颜色 */
             --primary-color: #3b82f6;
             --primary-hover: #2563eb;
+            --background-color: #ffffff;
+            --card-background: #ffffff;
+            /* 辅助颜色 */
             --secondary-color: #64748b;
+            --secondary-hover: #475569;
             --secondary-hover: #475569;
             --success-color: #22c55e;
             --error-color: #ef4444;
-            --background-color: #f8fafc;
+            --background-color: #ffffff;
             --card-background: #ffffff;
             --text-color: #1e293b;
             --text-secondary: #64748b;
@@ -99,16 +108,114 @@
         body {
             margin: 0;
             padding: 0;
+            padding-top: var(--nav-height);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: #ffffff;
             color: var(--text-color);
             min-height: 100vh;
         }
 
+        /* 导航栏样式 */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: var(--nav-background);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-right: auto;
+        }
+
+        .nav-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: var(--transition);
+            position: relative;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-hover);
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dropdown-background);
+            min-width: 200px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            z-index: 1001;
+            transition: visibility 0s, opacity 0.2s;
+            padding: 5px 0;
+        }
+
+        .dropdown::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            display: block;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+            color: var(--primary-color);
+        }
+
+        .dropdown:hover .dropdown-content {
+            visibility: visible;
+            opacity: 1;
+        }
+
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
+            width: 100%;
+            padding: 2rem;
+            margin: 0;
         }
 
         h1 {
@@ -129,16 +236,13 @@
 
         /* 添加语言切换按钮样式 */
         .nav-buttons {
-            position: fixed;
-            top: 20px;
-            right: 20px;
             display: flex;
             gap: 10px;
-            z-index: 1000;
+            align-items: center;
         }
 
         .community-btn,
-        .lang-switch {
+        .lang-switch-btn {
             display: flex;
             align-items: center;
             gap: 6px;
@@ -148,16 +252,13 @@
             cursor: pointer;
             font-size: 14px;
             transition: all 0.3s ease;
+            background: var(--primary-color);
+            color: white;
         }
 
         .community-btn:hover,
-        .lang-switch:hover {
+        .lang-switch-btn:hover {
             background: var(--primary-hover);
-        }
-
-        .lang-switch {
-            background: var(--primary-color);
-            color: white;
         }
 
         .modal {
@@ -167,7 +268,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
             z-index: 1001;
             backdrop-filter: blur(4px);
         }
@@ -398,8 +499,7 @@
         .lang-switch-container {
             display: flex;
             background-color: white;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
+            border-radius: 20px;
             border: 1px solid var(--primary-color);
             height: 36px;
         }
@@ -421,6 +521,20 @@
             justify-content: center;
         }
 
+        .lang-switch-btn:first-child {
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .lang-switch-btn:last-child {
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
         .lang-switch-btn[data-active="true"] {
             background-color: var(--primary-color);
             color: white;
@@ -433,21 +547,12 @@
             box-shadow: none;
         }
 
-        .lang-divider {
-            width: 1px;
-            height: 100%;
-            background-color: var(--primary-color);
-            margin: 0;
-            padding: 0;
-        }
         
         .result {
             text-align: center;
             margin-top: 2rem;
             padding: 2rem;
-            background: var(--card-background);
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
             display: none;
             animation: slideUp 0.3s ease;
         }
@@ -458,12 +563,10 @@
         }
         
         .favicon-card {
-            background: var(--card-background);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
             text-align: center;
             transition: var(--transition);
-            box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -504,7 +607,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: var(--card-background);
             padding: 1rem;
             border-radius: var(--radius-lg);
             border: 1px solid var(--border-color);
@@ -573,9 +675,7 @@
             border-radius: var(--radius-lg);
             padding: 1.5rem;
             text-align: center;
-            background-color: var(--card-background);
             transition: var(--transition);
-            box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -617,6 +717,37 @@
             padding: 0.5rem;
         }
 
+        .reload-icon-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: var(--radius-lg);
+            background-color: #f3f4f6;
+            border: 1px dashed var(--border-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            padding: 0.5rem;
+        }
+
+        .reload-icon-btn:hover {
+            background-color: #e5e7eb;
+            border-color: var(--primary-color);
+        }
+
+        .reload-icon-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--secondary-color);
+            transition: var(--transition);
+        }
+
+        .reload-icon-btn:hover svg {
+            fill: var(--primary-color);
+            transform: rotate(180deg);
+        }
+
         .app-card:hover .app-icon {
             transform: scale(1.05);
             box-shadow: var(--shadow-md);
@@ -643,7 +774,7 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.75rem 1.25rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            background-color: var(--primary-color);
             color: white;
             text-decoration: none;
             border-radius: var(--radius-md);
@@ -652,6 +783,7 @@
             transition: var(--transition);
             border: none;
             cursor: pointer;
+            box-shadow: var(--shadow-sm);
         }
 
         .download-btn::before {
@@ -661,7 +793,7 @@
         }
         
         .download-btn:hover {
-            filter: brightness(1.1);
+            background-color: var(--primary-hover);
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
@@ -715,6 +847,8 @@
         // 语言配置
         const translations = {
             'zh-CN': {
+                'downloading': '下载中...',
+                'iconLoadError': '图标加载失败，请稍后重试',
                 title: '图标获取器',
                 webMode: '网页应用',
                 iosAppMode: 'iOS App',
@@ -727,6 +861,7 @@
                 downloadFailed: '下载失败，请重试',
                 searchError: '搜索失败，请重试',
                 noResults: '没有找到相关结果',
+                reloadIcon: '重新加载图标',
 
                 switchToEnglish: 'English',
                 search: '搜索',
@@ -738,6 +873,8 @@
                 modalDescription: '扫描二维码加入用户群，获取更多使用技巧和更新通知'
             },
             'en': {
+                'downloading': 'Downloading...',
+                'iconLoadError': 'Failed to load icon, please try again later',
                 title: 'Icon Fetcher',
                 webMode: 'Web App',
                 iosAppMode: 'iOS App',
@@ -750,6 +887,7 @@
                 downloadFailed: 'Download failed, please try again',
                 searchError: 'Search failed, please try again',
                 noResults: 'No results found',
+                reloadIcon: 'Reload Icon',
 
                 switchToChinese: '中文',
                 search: 'Search',
@@ -854,7 +992,19 @@
     </script>
 </head>
 <body>
-    <nav role="navigation" aria-label="Language and community">
+    <!-- 主导航栏 -->
+    <nav class="main-nav" role="navigation" aria-label="Main navigation">
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">首页</a>
+            <div class="dropdown">
+                <a href="#" class="nav-link">其他工具</a>
+                <div class="dropdown-content">
+                    <a href="under-development.html">DeepSeek截图工具</a>
+                    <a href="under-development.html">更多工具开发中...</a>
+                </div>
+            </div>
+            <a href="blog.html" class="nav-link" target="_blank">Blog</a>
+        </div>
         <div class="nav-buttons">
             <button class="community-btn" onclick="toggleQRCode()" aria-label="Join community">
                 <svg class="icon" viewBox="0 0 24 24" width="16" height="16">
@@ -864,11 +1014,12 @@
             </button>
             <div class="lang-switch-container">
                 <button class="lang-switch-btn" onclick="switchLanguage('zh-CN')" data-lang="zh-CN" aria-label="切换到中文">中文</button>
-                <span class="lang-divider"></span>
                 <button class="lang-switch-btn" onclick="switchLanguage('en')" data-lang="en" aria-label="Switch to English">English</button>
             </div>
         </div>
     </nav>
+
+
 
     <!-- QR Code Modal -->
     <div id="qrModal" class="modal" onclick="toggleQRCode()">
@@ -886,16 +1037,16 @@
     <main role="main" class="container">
         <h1 id="mainTitle" aria-label="Icon Fetcher">图标获取器</h1>
         <nav class="toggle-container" role="tablist" aria-label="Select icon type">
-            <button class="toggle-btn active" onclick="switchMode('web')" id="webBtn" role="tab" aria-selected="true" aria-controls="webSection">网页应用</button>
-            <button class="toggle-btn" onclick="switchMode('ios')" id="iosBtn" role="tab" aria-selected="false" aria-controls="iosSection">iOS App</button>
+            <button class="toggle-btn active" onclick="switchMode('ios')" id="iosBtn" role="tab" aria-selected="true" aria-controls="iosSection">iOS App</button>
             <button class="toggle-btn" onclick="switchMode('mac')" id="macBtn" role="tab" aria-selected="false" aria-controls="macSection">Mac App</button>
             <button class="toggle-btn" onclick="switchMode('podcast')" id="podcastBtn" role="tab" aria-selected="false" aria-controls="podcastSection">播客</button>
+            <button class="toggle-btn" onclick="switchMode('web')" id="webBtn" role="tab" aria-selected="false" aria-controls="webSection">网页应用</button>
         </nav>
         
 
 
         <div class="input-group" role="search">
-            <input type="text" id="urlInput" placeholder="请输入网址 (例如: google.com)" aria-label="Enter website URL or app name" />
+            <input type="text" id="urlInput" placeholder="" aria-label="Enter website URL or app name" />
             <button onclick="search()" id="searchBtn" aria-label="Search for icons">获取图标</button>
         </div>
         
@@ -909,9 +1060,15 @@
     </div>
 
     <script>
-        let currentMode = 'web';
+        let currentMode = 'ios';
         const webSizes = [64, 96, 128];
         let currentResults = [];
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', function() {
+            // 设置正确的placeholder
+            switchMode('ios');
+        });
 
 
 
@@ -1158,7 +1315,7 @@
                 }
 
                 // 设置搜索结果数量
-                const limit = 12;
+                const limit = 18;
                 const primaryUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(currentQuery)}&entity=${entity}&media=${media}&limit=${limit}&country=${primaryCountry}&lang=${primaryLang}`;
                 const primaryResponse = await fetch(primaryUrl);
                 const primaryData = await primaryResponse.json();
@@ -1184,17 +1341,110 @@
                     appCard.className = 'app-card';
                     appCard.dataset.appId = app.trackId.toString();
                     
-                    let iconUrl;
+                    // 获取所有可能的图标URL
+                    const possibleUrls = [];
                     if (currentMode === 'podcast') {
-                        iconUrl = app.artworkUrl600 || app.artworkUrl100;
+                        if (app.artworkUrl600) possibleUrls.push(app.artworkUrl600);
+                        if (app.artworkUrl100) possibleUrls.push(app.artworkUrl100);
                     } else {
-                        iconUrl = app.artworkUrl512 || app.artworkUrl100;
+                        // 记录所有可用的图标URL
+                        console.log(`App: ${app.trackName} (应用ID: ${app.trackId}) 的可用图标信息:`);
+                        console.log('artworkUrl1024:', app.artworkUrl1024 || '不可用');
+                        console.log('artworkUrl512:', app.artworkUrl512 || '不可用');
+                        console.log('artworkUrl100:', app.artworkUrl100 || '不可用');
+                        
+                        if (app.artworkUrl1024) possibleUrls.push(app.artworkUrl1024);
+                        if (app.artworkUrl512) possibleUrls.push(app.artworkUrl512);
+                        if (app.artworkUrl100) possibleUrls.push(app.artworkUrl100);
                     }
+                    console.log(`可用的图标URL数量: ${possibleUrls.length}`);
+                    let iconUrl = possibleUrls[0]; // 默认使用第一个URL
+                    
                     const img = document.createElement('img');
                     img.src = iconUrl;
-                    img.crossOrigin = 'anonymous';
+                    // 不再设置crossOrigin，因为我们会通过其他方式处理图片
                     img.className = 'app-icon';
                     img.alt = app.trackName;
+                    
+                    // 添加图片加载错误处理
+                    // 当前使用的URL索引
+                    let currentUrlIndex = 0;
+                    
+                    // 图片加载错误处理函数
+                    img.onerror = async () => {
+                        console.error(`图标加载失败 - App: ${app.trackName}`);
+                        console.error(`当前尝试的URL: ${img.src}`);
+                        
+                        // 尝试使用下一个可用的URL
+                        currentUrlIndex++;
+                        if (currentUrlIndex < possibleUrls.length) {
+                            console.log(`尝试使用备用图标URL(${currentUrlIndex + 1}/${possibleUrls.length}): ${possibleUrls[currentUrlIndex]}`);
+                            img.src = possibleUrls[currentUrlIndex];
+                            return;
+                        }
+
+                        // 如果所有URL都失败，显示重新加载按钮
+                        const reloadBtn = document.createElement('button');
+                        reloadBtn.className = 'reload-icon-btn';
+                        reloadBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>`;
+                        reloadBtn.title = t('reloadIcon');
+                        
+                        // 添加重新加载事件
+                        reloadBtn.onclick = async () => {
+                            try {
+                                // 重新获取App数据
+                                const url = `https://itunes.apple.com/lookup?id=${app.trackId}`;
+                                const response = await fetch(url);
+                                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                                const data = await response.json();
+                                
+                                if (data.results && data.results[0]) {
+                                    const updatedApp = data.results[0];
+                                    // 重新获取所有可能的URL
+                                    const newPossibleUrls = [];
+                                    if (currentMode === 'podcast') {
+                                        if (updatedApp.artworkUrl600) newPossibleUrls.push(updatedApp.artworkUrl600);
+                                        if (updatedApp.artworkUrl100) newPossibleUrls.push(updatedApp.artworkUrl100);
+                                    } else {
+                                        if (updatedApp.artworkUrl1024) newPossibleUrls.push(updatedApp.artworkUrl1024);
+                                        if (updatedApp.artworkUrl512) newPossibleUrls.push(updatedApp.artworkUrl512);
+                                        if (updatedApp.artworkUrl100) newPossibleUrls.push(updatedApp.artworkUrl100);
+                                    }
+                                    
+                                    if (newPossibleUrls.length > 0) {
+                                        // 创建新的图片元素
+                                        const newImg = document.createElement('img');
+                                        newImg.src = newPossibleUrls[0];
+                                        newImg.crossOrigin = 'anonymous';
+                                        newImg.className = 'app-icon';
+                                        newImg.alt = updatedApp.trackName;
+                                        
+                                        // 设置新的错误处理，使用新的URL列表
+                                        let newUrlIndex = 0;
+                                        newImg.onerror = async () => {
+                                            newUrlIndex++;
+                                            if (newUrlIndex < newPossibleUrls.length) {
+                                                console.log(`重试时使用备用图标URL: ${newPossibleUrls[newUrlIndex]}`);
+                                                newImg.src = newPossibleUrls[newUrlIndex];
+                                                return;
+                                            }
+                                            // 如果所有新URL都失败，保持重新加载按钮
+                                            newImg.parentNode.replaceChild(reloadBtn, newImg);
+                                        };
+                                        
+                                        // 替换重新加载按钮
+                                        reloadBtn.parentNode.replaceChild(newImg, reloadBtn);
+                                    }
+                                }
+                            } catch (error) {
+                                console.error('重新加载图标失败:', error);
+                                alert(t('iconLoadError'));
+                            }
+                        };
+                        
+                        // 替换失败的图片
+                        img.parentNode.replaceChild(reloadBtn, img);
+                    };
                     
                     const nameDiv = document.createElement('div');
                     nameDiv.className = 'app-name';
@@ -1221,22 +1471,49 @@
                     const downloadBtn = document.createElement('button');
                     downloadBtn.textContent = t('downloadBtn');
                     downloadBtn.onclick = async function() {
+                        console.log('点击下载按钮:', app.trackName);
+                        downloadBtn.disabled = true; // 禁用按钮防止重复点击
+                        downloadBtn.textContent = t('downloading'); // 显示下载中状态
+                        
                         try {
-                            const response = await fetch(iconUrl);
-                            if (!response.ok) throw new Error('Network response was not ok');
+                            // 构建下载 URL
+                            let downloadUrl = iconUrl;
+                            const size = parseInt(sizeSelect.value);
                             
+                            // 如果是 iTunes 图标，修改URL大小
+                            if (downloadUrl.includes('mzstatic.com')) {
+                                // 从原始 URL 中提取基本路径
+                                const baseUrl = downloadUrl.split('/').slice(0, -1).join('/');
+                                downloadUrl = `${baseUrl}/${size}x${size}bb.jpg`;
+                            }
+                            
+                            console.log('开始下载图片:', downloadUrl);
+                            
+                            // 使用fetch下载图片
+                            const response = await fetch(downloadUrl);
+                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                             const blob = await response.blob();
+                            
+                            // 创建下载链接
                             const url = URL.createObjectURL(blob);
                             const a = document.createElement('a');
                             a.href = url;
-                            a.download = `${app.trackName}_${sizeSelect.value}x${sizeSelect.value}.png`;
+                            a.download = `${app.trackName}_${size}x${size}.jpg`;
+                            
+                            // 触发下载
                             document.body.appendChild(a);
                             a.click();
                             document.body.removeChild(a);
                             URL.revokeObjectURL(url);
+                            
+                            console.log('下载流程完成');
                         } catch (error) {
                             console.error('下载失败:', error);
                             alert(t('downloadFailed'));
+                        } finally {
+                            // 恢复按钮状态
+                            downloadBtn.disabled = false;
+                            downloadBtn.textContent = t('downloadBtn');
                         }
                     };
                     
