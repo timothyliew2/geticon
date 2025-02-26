@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<!-- 引入html2canvas库，用于将HTML元素转换为图片 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 响应式视口设置 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DeepSeek截图工具 | Icon Fetcher</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="DeepSeek智能截图工具 - 快速、智能的截图解决方案">
+    <meta name="keywords" content="deepseek,截图工具,智能截图,图片处理">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    
+    <style>
+        /* 全局CSS变量定义
+         * 使用CSS变量可以实现一致的主题风格
+         * 并且方便全局样式的管理和修改
+         */
+        :root {
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-color: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        /* 基本页面样式
+         * 使用系统默认字体栈确保最佳的跨平台显示效果
+         * 采用border-box盒模型便于布局计算
+         */
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 主容器样式
+         * 使用CSS Grid实现两列布局
+         * 左侧为输入面板，右侧为预览面板
+         * minmax(0, 1fr)确保列宽度自适应且不会溢出
+         */
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 40px;
+            align-items: stretch;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .input-panel {
+            background: var(--card-background);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-panel {
+            background: var(--card-background);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 700px; /* 设置固定高度 */
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden; /* 防止内容溢出 */
+        }
+
+        .preview-panel img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .style-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .style-option {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .style-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .button:hover {
+            background: var(--primary-hover);
+        }
+
+        #previewCanvas {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border: 1px solid #eee; /* 添加边框以便于查看 */
+        }
+
+        .preview-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            max-width: 800px; /* 限制最大宽度 */
+            margin: 0 auto; /* 水平居中 */
+        }
+
+        /* 模板容器 */
+        #template {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform-origin: center;
+            transform: translate(-50%, -50%) scale(var(--template-scale, 1));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: visible;
+            pointer-events: none;
+        }
+
+        #templateImage {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+        
+        /* 消息样式 */
+        .message-bubble {
+            height: 45px;
+            background-color: #E8F3FF;
+            border-radius: 22.5px;
+            position: absolute;
+            top: 134px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            white-space: nowrap;
+        }
+
+        .message-text {
+            font-family: "PingFang SC";
+            font-size: 17px;
+            color: #000000;
+            font-weight: 400;
+        }
+
+        /* 回答内容样式 */
+        .answer-container {
+            position: absolute;
+            top: 273px;
+            left: 63px;
+            right: 25px;
+            max-height: calc(100% - 273px - 152px);
+            overflow: hidden;
+        }
+
+        .answer-text {
+            font-family: "PingFang SC";
+            font-size: 17px;
+            color: #000000;
+            font-weight: 400;
+            white-space: pre-wrap; /* 保留换行和空格 */
+            word-wrap: break-word; /* 长单词换行 */
+            line-height: 1.4; /* 设置行高 */
+        }
+
+        /* 样式切换相关的样式 */
+        #template.style1, #template.style2 {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* style2（带边框）样式下的消息气泡位置 */
+        #template.style2 .message-bubble {
+            top: 172px;
+            right: 60px;
+        }
+
+        /* style2（带边框）样式下的回答内容位置 */
+        #template.style2 .answer-container {
+            top: 311px;
+            left: 104px;
+            right: 53px;
+            max-height: calc(100% - 311px - 152px);
+        }
+
+        h1 {
+            color: var(--text-color);
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-home:hover {
+            color: var(--primary-hover);
+        }
+        
+        .char-count {
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .char-count.limit-reached {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        
+        .answer-char-count {
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .answer-char-count.limit-reached {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .input-panel, .preview-panel {
+                width: 100%;
+                max-width: 100%;
+                margin: 10px 0;
+            }
+            
+            .preview-container {
+                height: 50vh;
+                min-height: 300px;
+            }
+            
+            h1 {
+                font-size: 24px;
+                margin: 15px 0;
+            }
+            
+            .style-selector {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .style-option {
+                margin: 0 5px;
+                padding: 8px 15px;
+            }
+            
+            .input-group textarea {
+                height: 100px;
+            }
+            
+            .button {
+                width: 100%;
+                margin-top: 15px;
+            }
+        }
+        
+        /* 移动端提示样式 */
+        .mobile-notice {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+            transition: opacity 0.5s;
+        }
+        
+        .mobile-view {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-home">← 返回首页</a>
+    <h1>DeepSeek截图生成器</h1>
+    
+    <div class="container">
+        <div class="input-panel">
+            <div class="input-group">
+                <label for="questionInput">问题内容 <span class="char-count">(0/20)</span></label>
+                <textarea id="questionInput" placeholder="输入问题内容..." maxlength="20"></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label for="answerInput">回答内容 <span class="answer-char-count">(0/300)</span></label>
+                <textarea id="answerInput" placeholder="输入回答内容..." maxlength="300"></textarea>
+            </div>
+            
+            <div class="style-selector">
+                <div class="style-option selected" data-style="style1">
+                    无边框
+                </div>
+                <div class="style-option" data-style="style2">
+                    带边框
+                </div>
+            </div>
+            
+            <button class="button" id="downloadBtn">下载截图</button>
+        </div>
+        
+        <div class="preview-panel">
+            <div class="preview-container">
+                <canvas id="previewCanvas"></canvas>
+            </div>
+            <!-- 隐藏的模板区域 -->
+            <div id="template" class="style1">
+                <img id="templateImage" src="Image_DeepSeek/style1.svg" alt="template" crossorigin="anonymous" />
+                <div class="message-bubble">
+                    <span class="message-text"></span>
+                </div>
+                <div class="answer-container">
+                    <div class="answer-text"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 初始化和全局变量设置
+         */
+        // 获取关键的DOM元素
+        const questionInput = document.getElementById('questionInput');  // 问题输入框
+        const answerInput = document.getElementById('answerInput');      // 回答输入框
+        const styleOptions = document.querySelectorAll('.style-option'); // 样式选择按钮
+        const downloadBtn = document.getElementById('downloadBtn');       // 下载按钮
+
+        // 当前选中的样式，默认为无边框样式
+        let currentStyle = 'style1';
+
+        // 初始化模板图片对象
+        const templateImage = new Image();
+        templateImage.crossOrigin = 'anonymous';  // 允许跨域加载图片
+        
+        /**
+         * 加载图片的通用函数
+         * @param {string} imagePath - 图片路径
+         * @returns {Promise<HTMLImageElement>} - 返回一个 Promise，解析为加载完成的图片对象
+         * 使用 Promise 处理异步加载，确保图片完全加载后再进行后续操作
+         */
+        async function loadImage(imagePath) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';  // 允许跨域加载
+                
+                // 图片加载成功的回调
+                img.onload = () => {
+                    console.log('图片加载成功:', imagePath);
+                    console.log('Image dimensions:', img.naturalWidth, 'x', img.naturalHeight);
+                    resolve(img);
+                };
+                
+                // 图片加载失败的错误处理
+                img.onerror = (error) => {
+                    console.error('图片加载失败:', imagePath, error);
+                    reject(error);
+                };
+                
+                // 开始加载图片
+                img.src = imagePath;
+            });
+        }
+        
+        // 加载初始图片
+        const initialExtension = 'svg';
+        const initialPath = `Image_DeepSeek/style1.${initialExtension}?${new Date().getTime()}`;
+        loadImage(initialPath).then(img => {
+            templateImage.src = img.src;
+            updatePreview();
+        }).catch(error => {
+            console.error('初始图片加载失败:', error);
+        });
+
+        /**
+         * 更新预览函数
+         * 负责将当前的输入内容和样式应用到预览区域
+         * 使用html2canvas将模板转换为图片
+         */
+        // 计算并更新模板的缩放比例
+        function updateTemplateScale() {
+            const template = document.getElementById('template');
+            const previewContainer = document.querySelector('.preview-container');
+            
+            // 使用模板图片的实际尺寸
+            const templateWidth = templateImage.naturalWidth;
+            const templateHeight = templateImage.naturalHeight;
+            
+            // 设置模板容器的尺寸为图片的实际尺寸
+            template.style.width = `${templateWidth}px`;
+            template.style.height = `${templateHeight}px`;
+            
+            // 获取预览容器的尺寸
+            const containerWidth = previewContainer.clientWidth;
+            const containerHeight = previewContainer.clientHeight;
+            
+            // 计算缩放比例，选择较小的值以适应容器
+            const scaleX = containerWidth / templateWidth;
+            const scaleY = containerHeight / templateHeight;
+            const scale = Math.min(scaleX, scaleY, 1); // 限制最大缩放为1
+            
+            // 设置CSS变量
+            template.style.setProperty('--template-scale', scale);
+        }
+
+        // 监听窗口调整
+        window.addEventListener('resize', updateTemplateScale);
+
+        async function updatePreview() {
+            // 检查模板图片是否加载完成
+            if (!templateImage.complete) {
+                console.log('Template image not loaded yet');
+                return;
+            }
+            
+            // 更新缩放比例
+            updateTemplateScale();
+
+            try {
+                // 更新模板中的问答文本
+                const questionText = document.querySelector('.message-text');
+                const answerText = document.querySelector('.answer-text');
+                questionText.textContent = questionInput.value;
+                answerText.textContent = answerInput.value;
+
+                // 设置模板容器的尺寸为图片的原始尺寸
+                const template = document.getElementById('template');
+                template.style.width = templateImage.naturalWidth + 'px';
+                template.style.height = templateImage.naturalHeight + 'px';
+
+                // 使用html2canvas生成预览
+                const canvas = await html2canvas(template, {
+                    backgroundColor: null,
+                    scale: 1,
+                    logging: false,
+                    width: templateImage.naturalWidth,
+                    height: templateImage.naturalHeight,
+                    useCORS: true,
+                    allowTaint: true,
+                    foreignObjectRendering: true, // 启用foreignObject渲染
+                    onclone: function(clonedDoc) {
+                        const clonedTemplate = clonedDoc.querySelector('#template');
+                        const clonedImage = clonedDoc.querySelector('#templateImage');
+                        
+                        // 确保克隆的模板和图片都有正确的设置
+                        clonedTemplate.className = currentStyle;
+                        clonedTemplate.style.width = templateImage.naturalWidth + 'px';
+                        clonedTemplate.style.height = templateImage.naturalHeight + 'px';
+                        clonedTemplate.style.visibility = 'visible';
+                        clonedTemplate.style.opacity = '1';
+                        
+                        // 确保克隆的图片也使用正确的源
+                        clonedImage.src = templateImage.src;
+                        clonedImage.style.opacity = '1';
+                        clonedImage.style.visibility = 'visible';
+                    }
+                });
+                
+
+
+                const previewCanvas = document.getElementById('previewCanvas');
+                // 将canvas的内容缩放到适合的大小
+                // 使用画布的原始尺寸
+                previewCanvas.width = canvas.width;
+                previewCanvas.height = canvas.height;
+                const ctx = previewCanvas.getContext('2d');
+                ctx.drawImage(canvas, 0, 0);
+                
+
+            } catch (error) {
+                console.error('Preview generation failed:', error);
+            }
+        }
+
+        /**
+         * 事件监听设置
+         * 使用防抖处理输入事件，避免频繁更新造成的性能问题
+         */
+        let debounceTimer;  // 防抖计时器
+
+        // 监听问题输入框的变化
+        questionInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);  // 清除之前的定时器
+            debounceTimer = setTimeout(updatePreview, 300);  // 300ms后更新预览
+            
+            updateCharCount();
+        });
+
+        // 监听回答输入框的变化
+        answerInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);  // 清除之前的定时器
+            debounceTimer = setTimeout(updatePreview, 300);  // 300ms后更新预览
+            
+            updateAnswerCharCount();
+        });
+
+        /**
+         * 样式切换功能
+         * 处理样式选项的点击事件，实现样式的切换和预览更新
+         */
+        styleOptions.forEach(option => {
+            option.addEventListener('click', async function() {
+                // 更新样式选中状态，移除其他选项的选中状态
+                styleOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');  // 添加当前选项的选中状态
+
+                // 从数据属性中获取并更新当前样式
+                currentStyle = this.dataset.style;
+                console.log('切换到样式:', currentStyle);
+                
+                // 更新模板容器的样式类
+                const template = document.getElementById('template');
+                template.className = currentStyle;
+                
+                // 构建新的图片路径，添加时间戳防止缓存
+                const extension = 'svg';
+                const timestamp = new Date().getTime();
+                const imagePath = `Image_DeepSeek/${currentStyle}.${extension}?${timestamp}`;
+                
+                /**
+                 * 加载新样式的图片并更新预览
+                 * 包含以下步骤：
+                 * 1. 加载新图片
+                 * 2. 更新所有相关的图片元素
+                 * 3. 等待图片完全加载
+                 * 4. 更新预览
+                 */
+                try {
+                    // 加载新样式的图片
+                    const img = await loadImage(imagePath);
+                    
+                    // 同时更新内存中的图片对象和DOM中的图片元素
+                    templateImage.src = img.src;
+                    document.querySelector('#templateImage').src = img.src;
+                    
+                    // 等待所有图片完全加载
+                    await Promise.all([
+                        // 检查内存中的图片对象
+                        new Promise((resolve) => {
+                            const checkImage = () => {
+                                if (templateImage.complete && templateImage.naturalWidth > 0) {
+                                    resolve();
+                                } else {
+                                    templateImage.onload = checkImage;
+                                }
+                            };
+                            checkImage();
+                        }),
+                        // 检查DOM中的图片元素
+                        new Promise((resolve) => {
+                            const domImage = document.querySelector('#templateImage');
+                            const checkDomImage = () => {
+                                if (domImage.complete && domImage.naturalWidth > 0) {
+                                    resolve();
+                                } else {
+                                    domImage.onload = checkDomImage;
+                                }
+                            };
+                            checkDomImage();
+                        })
+                    ]);
+
+                    // 等待一小段时间确保DOM完全更新
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    // 生成新的预览
+                    await updatePreview();
+                } catch (error) {
+                    console.error('加载失败:', error);
+                }
+            });
+        });
+
+        // 下载功能
+        downloadBtn.addEventListener('click', async () => {
+            try {
+                // 禁用下载按钮，防止重复点击
+                downloadBtn.disabled = true;
+                downloadBtn.textContent = '生成中...';
+
+                // 准备模板
+                const template = document.getElementById('template');
+                template.style.visibility = 'visible';
+
+                // 确保图片完全加载
+                await new Promise((resolve) => {
+                    if (templateImage.complete) {
+                        resolve();
+                    } else {
+                        templateImage.onload = resolve;
+                    }
+                });
+
+                // 确保模板容器使用图片的实际尺寸
+                const actualWidth = templateImage.naturalWidth;
+                const actualHeight = templateImage.naturalHeight;
+                
+                // 创建一个临时容器来渲染截图
+                const tempContainer = document.createElement('div');
+                tempContainer.style.position = 'absolute';
+                tempContainer.style.left = '-9999px';
+                tempContainer.style.width = `${actualWidth}px`;
+                tempContainer.style.height = `${actualHeight}px`;
+                tempContainer.style.overflow = 'hidden'; // 防止内容溢出
+                tempContainer.style.zIndex = '-1'; // 确保在最底层
+                document.body.appendChild(tempContainer);
+                
+                // 克隆模板到临时容器
+                const templateClone = template.cloneNode(true);
+                templateClone.style.position = 'absolute';
+                templateClone.style.left = '0';
+                templateClone.style.top = '0';
+                templateClone.style.transform = 'none';
+                templateClone.style.width = `${actualWidth}px`;
+                templateClone.style.height = `${actualHeight}px`;
+                templateClone.style.visibility = 'visible';
+                templateClone.style.pointerEvents = 'none';
+                
+                // 确保文字位置正确
+                const questionInput = document.getElementById('questionInput').value;
+                const answerInput = document.getElementById('answerInput').value;
+                
+                // 获取当前样式
+                const currentStyle = template.className;
+                templateClone.className = currentStyle;
+                
+                // 设置文字内容
+                const messageBubble = templateClone.querySelector('.message-bubble');
+                const answerContainer = templateClone.querySelector('.answer-container');
+                
+                if (messageBubble) {
+                    messageBubble.querySelector('.message-text').textContent = questionInput;
+                }
+                
+                if (answerContainer) {
+                    answerContainer.querySelector('.answer-text').textContent = answerInput;
+                }
+                
+                // 确保图片正确加载
+                const clonedImage = templateClone.querySelector('#templateImage');
+                clonedImage.src = templateImage.src;
+                
+                tempContainer.appendChild(templateClone);
+
+                // 等待图片加载
+                await new Promise((resolve) => {
+                    if (clonedImage.complete) {
+                        resolve();
+                    } else {
+                        clonedImage.onload = resolve;
+                    }
+                });
+
+                // 生成canvas
+                const canvas = await html2canvas(templateClone, {
+                    backgroundColor: null,
+                    scale: isMobileDevice() ? 2 : 4, // 移动端降低缩放比例以提高性能
+                    logging: false,
+                    width: actualWidth,
+                    height: actualHeight,
+                    useCORS: true,
+                    allowTaint: true,
+                    removeContainer: false,
+                    foreignObjectRendering: false // 在移动端可能会有问题，禁用
+                });
+                
+                // 移除临时容器
+                document.body.removeChild(tempContainer);
+
+                // 创建下载链接
+                const link = document.createElement('a');
+                // 获取问题内容作为文件名，如果为空则使用默认名称
+                const questionText = document.getElementById('questionInput').value.trim();
+                const fileName = questionText ? 
+                    // 限制文件名长度，并移除不合法的文件名字符
+                    questionText.substring(0, 50).replace(/[\\/:*?"<>|]/g, '_') : 
+                    'deepseek-screenshot';
+                link.download = `${fileName}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // 恢复按钮状态
+                downloadBtn.disabled = false;
+                downloadBtn.textContent = '下载截图';
+            } catch (error) {
+                console.error('Download failed:', error);
+                alert('截图生成失败，请重试');
+                // 恢复按钮状态
+                downloadBtn.disabled = false;
+                downloadBtn.textContent = '下载截图';
+            }
+        });
+
+        // 初始加载
+        templateImage.onload = updatePreview;
+        
+        // 检测是否为移动设备
+        function isMobileDevice() {
+            return (window.innerWidth <= 768) || 
+                   (navigator.userAgent.match(/Android/i) ||
+                    navigator.userAgent.match(/webOS/i) ||
+                    navigator.userAgent.match(/iPhone/i) ||
+                    navigator.userAgent.match(/iPad/i) ||
+                    navigator.userAgent.match(/iPod/i) ||
+                    navigator.userAgent.match(/BlackBerry/i) ||
+                    navigator.userAgent.match(/Windows Phone/i));
+        }
+        
+        // 页面加载时检测是否为移动设备
+        if (isMobileDevice()) {
+            console.log('当前为移动设备');
+            
+            // 移动端特殊处理
+            document.querySelector('.container').classList.add('mobile-view');
+            
+            // 添加移动端提示
+            const mobileNotice = document.createElement('div');
+            mobileNotice.className = 'mobile-notice';
+            mobileNotice.innerHTML = '<p>您正在使用移动设备访问，已为您优化界面。横屏体验更佳。</p>';
+            document.body.insertBefore(mobileNotice, document.querySelector('.container'));
+            
+            // 3秒后自动隐藏提示
+            setTimeout(() => {
+                mobileNotice.style.opacity = '0';
+                setTimeout(() => mobileNotice.remove(), 500);
+            }, 3000);
+        } else {
+            console.log('当前为桌面设备');
+        }
+        
+        // 初始化字数计数器
+        function updateCharCount() {
+            const charCount = document.querySelector('.char-count');
+            const inputLength = questionInput.value.length;
+            charCount.textContent = `(${inputLength}/20)`;
+            if (inputLength >= 20) {
+                charCount.classList.add('limit-reached');
+            } else {
+                charCount.classList.remove('limit-reached');
+            }
+        };
+        
+        function updateAnswerCharCount() {
+            const charCount = document.querySelector('.answer-char-count');
+            const inputLength = answerInput.value.length;
+            charCount.textContent = `(${inputLength}/300)`;
+            if (inputLength >= 300) {
+                charCount.classList.add('limit-reached');
+            } else {
+                charCount.classList.remove('limit-reached');
+            }
+        };
+        
+        // 页面加载时初始化字数计数
+        updateCharCount();
+        updateAnswerCharCount();
+    </script>
+</body>
+</html>
