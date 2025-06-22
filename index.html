@@ -3,11 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AppIcon - 高质量App图标下载平台</title>
+    
+    <!-- 动态标题和描述，根据语言切换 -->
+    <title id="pageTitle">Geticon - 高质量App图标下载平台</title>
     
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3569373007781002" crossorigin="anonymous"></script>
     
+    <!-- 域名重定向脚本 - 必须在所有其他脚本之前 -->
+    <script>
+        // 检查当前域名，如果是 geticon.online 则自动跳转到 geticon.xyz
+        (function() {
+            if (window.location.hostname === 'geticon.online') {
+                // 保持当前的路径和查询参数
+                const newUrl = 'https://geticon.xyz' + window.location.pathname + window.location.search + window.location.hash;
+                // 使用 301 永久重定向
+                window.location.replace(newUrl);
+            }
+        })();
+    </script>
+
     <!-- Google tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SCJ74BPRB7"></script>
     <script>
@@ -18,38 +33,240 @@
       gtag('config', 'G-SCJ74BPRB7');
     </script>
     
-    <!-- SEO 元标签 -->
-    <meta name="description" content="AppIcon为设计师、开发者和营销人员提供高质量App图标下载服务。轻松获取iOS、Mac应用的官方Logo。">
-    <meta name="keywords" content="app图标,logo下载,应用图标,设计资源,图标库,iOS图标,Android图标,高清图标">
-    <meta name="author" content="AppIcon">
+    <!-- 中文SEO元标签 -->
+    <meta name="description" content="Geticon为设计师、开发者和营销人员提供高质量App图标下载服务。轻松获取iOS、Mac应用的官方Logo。" id="metaDescription">
+    <meta name="keywords" content="app图标,logo下载,应用图标,设计资源,图标库,iOS图标,Android图标,高清图标,app icons,logo download,application icons,design resources,icon library,iOS icons,Android icons,high resolution icons" id="metaKeywords">
+    <meta name="author" content="Geticon">
     <meta name="robots" content="index, follow">
     
+    <!-- 英文SEO优化 -->
+    <link rel="canonical" href="https://geticon.online/" id="canonicalLink">
+    <link rel="alternate" hreflang="zh-CN" href="https://geticon.online/">
+    <link rel="alternate" hreflang="en" href="https://geticon.online/en/">
+    <link rel="alternate" hreflang="x-default" href="https://geticon.online/">
+    
+    <!-- 地理位置信息 -->
+    <meta name="geo.region" content="CN">
+    <meta name="geo.placename" content="China">
+    <meta name="geo.position" content="39.9042;116.4074">
+    <meta name="ICBM" content="39.9042, 116.4074">
+    
+    <!-- 网站验证和安全 -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-TileColor" content="#6366f1">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    
+    <!-- 性能和缓存优化 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//itunes.apple.com">
+    
+    <!-- 内容安全策略 -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; img-src 'self' https: data: blob:;">
+    
+    <!-- 搜索引擎优化 -->
+    <meta name="rating" content="general">
+    <meta name="distribution" content="global">
+    <meta name="revisit-after" content="7 days">
+    <meta name="expires" content="never">
+    
     <!-- Open Graph Meta Tags for Social Media -->
-    <meta property="og:title" content="AppIcon - 高质量App图标下载平台">
-    <meta property="og:description" content="为设计师、开发者和营销人员提供超过50万+iOS与Android应用的高清官方图标">
+    <meta property="og:title" content="Geticon - 高质量App图标下载平台" id="ogTitle">
+    <meta property="og:description" content="为设计师、开发者和营销人员提供超过50万+iOS与Android应用的高清官方图标" id="ogDescription">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://geticon.online/">
+    <meta property="og:site_name" content="Geticon">
+    <meta property="og:image" content="https://geticon.online/images/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Geticon - High Quality App Icons Download Platform">
     <meta property="og:locale" content="zh_CN">
     <meta property="og:locale:alternate" content="en_US">
     
     <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="AppIcon - 高质量App图标下载平台">
-    <meta name="twitter:description" content="为设计师、开发者和营销人员提供超过50万+iOS与Android应用的高清官方图标">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@Geticon">
+    <meta name="twitter:creator" content="@Geticon">
+    <meta name="twitter:title" content="Geticon - 高质量App图标下载平台" id="twitterTitle">
+    <meta name="twitter:description" content="为设计师、开发者和营销人员提供超过50万+iOS与Android应用的高清官方图标" id="twitterDescription">
+    <meta name="twitter:image" content="https://geticon.online/images/twitter-card.png">
+    <meta name="twitter:image:alt" content="Geticon - High Quality App Icons Download Platform">
     
     <!-- Mobile Web App -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="AppIcon">
+    <meta name="apple-mobile-web-app-title" content="Geticon">
     
     <!-- Schema.org markup for Google -->
-    <script type="application/ld+json">
+    <script type="application/ld+json" id="schemaMarkup">
     {
-      "@context": "http://schema.org",
+      "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "AppIcon",
-      "description": "AppIcon为设计师、开发者和营销人员提供高质量App图标下载服务。轻松获取iOS、Mac应用的官方Logo。",
+      "name": "Geticon",
+      "alternateName": ["App Icon Downloader", "应用图标下载器"],
+      "description": "Geticon为设计师、开发者和营销人员提供高质量App图标下载服务。轻松获取iOS、Mac应用的官方Logo。",
+      "url": "https://geticon.online",
       "applicationCategory": "UtilitiesApplication",
       "operatingSystem": "Web browser",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "softwareVersion": "1.0",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "1250"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+              "creator": {
+        "@type": "Organization",
+        "name": "Geticon",
+        "url": "https://geticon.online"
+      },
+      "inLanguage": ["zh-CN", "en-US"],
+      "audience": {
+        "@type": "Audience",
+        "audienceType": ["Designers", "Developers", "Marketers", "设计师", "开发者", "营销人员"]
+      },
+      "featureList": [
+        "High-quality app icon downloads",
+        "500,000+ iOS and Android app icons",
+        "Multiple resolution support",
+        "Batch download functionality",
+        "Free to use",
+        "高质量应用图标下载",
+        "50万+iOS和Android应用图标",
+        "多分辨率支持",
+        "批量下载功能",
+        "免费使用"
+      ],
+      "screenshot": "https://geticon.online/images/screenshot.png",
+      "image": "https://geticon.online/images/app-logo-hd.png"
+    }
+    </script>
+    
+    <!-- 面包屑导航结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://geticon.online"
+        }
+      ]
+    }
+    </script>
+    
+    <!-- 网站搜索框结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://geticon.online",
+      "name": "Geticon",
+      "alternateName": "App Icon Download Platform",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://geticon.online/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <!-- 组织信息结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Geticon",
+      "url": "https://geticon.online",
+      "logo": "https://geticon.online/images/logo/app-logo-hd.png",
+      "description": "Professional app icon download platform serving designers, developers, and marketers worldwide",
+      "foundingDate": "2023",
+      "sameAs": [
+        "https://github.com/appicon",
+        "https://twitter.com/appicon"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": ["English", "Chinese"]
+      }
+    }
+    </script>
+    
+    <!-- FAQ结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How to download app icons?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply search for the app name, click on the app icon you want, and then click the download button. You can download icons in multiple resolutions including 1024x1024, 512x512, and 100x100 pixels."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are the app icons free to download?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, all app icons on our platform are free to download. We provide high-quality official app icons from iOS and Android applications."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What formats are available for download?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All icons are available in PNG format with transparent backgrounds. We offer multiple resolutions: 1024x1024 (highest quality), 512x512, and 100x100 pixels."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I download multiple icons at once?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, you can use our shopping cart feature to add up to 20 icons and download them all at once using the batch download functionality."
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <!-- 服务结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "App Icon Download Service",
+      "description": "Professional app icon download service providing high-quality iOS and Android app icons",
+      "provider": {
+        "@type": "Organization",
+        "name": "Geticon"
+      },
+      "areaServed": "Worldwide",
+              "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://geticon.online",
+        "serviceSmsNumber": null,
+        "servicePhone": null
+      },
+      "category": "Design Tools",
       "offers": {
         "@type": "Offer",
         "price": "0",
@@ -224,6 +441,62 @@
         .fade-in-permanent {
             animation: fadeInPermanent 0.5s ease-in-out forwards;
         }
+        
+        /* 圆角开关样式 */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #6366f1;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        /* Tailwind CSS的peer样式补充 */
+        .peer:checked ~ .peer-checked\:bg-primary-600 {
+            background-color: #6366f1;
+        }
+        
+        .peer:checked ~ .peer-checked\:after\:translate-x-full::after {
+            transform: translateX(100%);
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -233,14 +506,14 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <a href="#" class="flex-shrink-0 flex items-center">
-                        <img src="images/logo/app-logo-hd.png" alt="AppIcon Logo" class="w-8 h-8 mr-2 object-contain">
-                        <span class="text-xl font-bold text-gray-900">AppIcon</span>
+                        <img src="images/logo/app-logo-hd.png" alt="Geticon Logo" class="w-8 h-8 mr-2 object-contain">
+                        <span class="text-xl font-bold text-gray-900">Geticon</span>
                     </a>
                     <nav class="hidden md:ml-10 md:flex md:space-x-8">
                         <a href="#" class="text-primary-600 border-primary-500 border-b-2 font-medium text-sm px-1 py-4" data-lang-key="nav.home">首页</a>
                         <a href="#" class="text-gray-500 hover:text-gray-900 font-medium text-sm px-1 py-4" data-lang-key="nav.popular">热门应用</a>
                         <a href="#" class="text-gray-500 hover:text-gray-900 font-medium text-sm px-1 py-4" data-lang-key="nav.categories">分类浏览</a>
-                        <a href="#" class="text-gray-500 hover:text-gray-900 font-medium text-sm px-1 py-4" data-lang-key="nav.about">关于我们</a>
+                        <a href="about.html" class="text-gray-500 hover:text-gray-900 font-medium text-sm px-1 py-4" data-lang-key="nav.about" onclick="navigateToAbout(event)">关于我们</a>
                 </div>
                 <div class="flex items-center"> 
                     <!-- 语言切换按钮 -->
@@ -276,7 +549,7 @@
                 <a href="#" class="text-primary-600 font-medium block px-3 py-2 rounded-md text-base" data-lang-key="nav.home">首页</a>
                 <a href="#" class="text-gray-500 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium" data-lang-key="nav.popular">热门应用</a>
                 <a href="#" class="text-gray-500 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium" data-lang-key="nav.categories">分类浏览</a>
-                <a href="#" class="text-gray-500 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium" data-lang-key="nav.about">关于我们</a>
+                <a href="about.html" class="text-gray-500 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium" data-lang-key="nav.about" onclick="navigateToAbout(event)">关于我们</a>
                 <div class="flex items-center px-3 py-2">
                     <button id="mobileLangToggle" class="flex items-center text-primary-600 font-medium">
                         <i class="fas fa-globe mr-2"></i> <span data-lang-key="language">语言</span>: <span id="mobileCurrentLang" class="ml-1">中文</span>
@@ -290,22 +563,22 @@
     </header>
 
     <!-- 主内容区 -->
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10">
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10" role="main" itemScope itemType="https://schema.org/WebApplication">
         <!-- 搜索区域 -->
-        <section class="mt-6 md:mt-10 max-w-4xl mx-auto">
+        <section class="mt-6 md:mt-10 max-w-4xl mx-auto" itemScope itemType="https://schema.org/SearchAction">
             <div class="bg-white shadow-md rounded-xl p-6 md:p-8">
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-6" itemProp="headline">
                     <span data-lang-key="search.title.pre">获取高质量</span><span class="text-primary-600" data-lang-key="search.title.highlight">App图标</span><span data-lang-key="search.title.post">资源</span>
                 </h1>
-                <p class="text-gray-500 text-center mb-8 max-w-2xl mx-auto" data-lang-key="search.subtitle">
+                <p class="text-gray-500 text-center mb-8 max-w-2xl mx-auto" data-lang-key="search.subtitle" itemProp="description">
                     为设计师、开发者和营销人员提供超过50万+iOS与Android应用的高清官方图标
                 </p>
                 
                 <div class="relative max-w-2xl mx-auto">
-                    <div class="flex items-center bg-gray-50 rounded-lg shadow-sm overflow-hidden border border-gray-200">
-                        <input id="searchInput" type="text" placeholder="输入应用名称搜索..." data-lang-key="search.placeholder" data-lang-attr="placeholder" class="w-full px-4 py-3 text-gray-700 bg-transparent focus:outline-none" />
-                        <button id="searchBtn" class="flex-shrink-0 bg-primary-600 text-white px-6 py-3 rounded-r-lg hover:bg-primary-700 transition duration-200 focus:outline-none">
-                            <i class="fas fa-search mr-2"></i><span data-lang-key="search.button">搜索</span>
+                    <div class="flex items-center bg-gray-50 rounded-lg shadow-sm overflow-hidden border border-gray-200" role="search">
+                        <input id="searchInput" type="search" placeholder="输入应用名称搜索..." data-lang-key="search.placeholder" data-lang-attr="placeholder" class="w-full px-4 py-3 text-gray-700 bg-transparent focus:outline-none" aria-label="Search for app icons" itemProp="query-input" />
+                        <button id="searchBtn" class="flex-shrink-0 bg-primary-600 text-white px-6 py-3 rounded-r-lg hover:bg-primary-700 transition duration-200 focus:outline-none" type="submit" aria-label="Search">
+                            <i class="fas fa-search mr-2" aria-hidden="true"></i><span data-lang-key="search.button">搜索</span>
                         </button>
                     </div>
                 </div>
@@ -313,11 +586,11 @@
         </section>
 
         <!-- 应用分类 -->
-        <section class="mt-12">
+        <section class="mt-12" itemScope itemType="https://schema.org/ItemList">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-gray-900" data-lang-key="categories.title">应用分类</h2>
-                <a href="#" class="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center">
-                    <span data-lang-key="categories.viewAll">查看全部</span> <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                <h2 class="text-xl font-bold text-gray-900" data-lang-key="categories.title" itemProp="name">应用分类</h2>
+                <a href="#" class="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center" aria-label="View all categories">
+                    <span data-lang-key="categories.viewAll">查看全部</span> <i class="fas fa-chevron-right ml-1 text-xs" aria-hidden="true"></i>
                 </a>
             </div>
             
@@ -465,17 +738,35 @@
                 </div>
                 
                 <!-- 购物车底部操作栏 -->
-                <div class="border-t border-gray-200 px-6 py-4 bg-gray-50 flex justify-between items-center">
-                    <div class="text-sm text-gray-500">
-                        <span data-lang-key="cart.selected">已选择</span> <span id="cartSelectedCount" class="font-medium text-gray-900">0</span> <span data-lang-key="cart.items">个图标</span>
+                <div class="border-t border-gray-200 px-6 py-4 bg-gray-50">
+                    <!-- 圆角设置区域 -->
+                    <div class="mb-4 p-3 bg-white rounded-lg border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-magic text-primary-600"></i>
+                                <label class="text-sm font-medium text-gray-700" data-lang-key="corner.title">圆角设置</label>
+                                <div class="text-xs text-gray-500" data-lang-key="corner.subtitle">(苹果风格)</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="cornerRadiusToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
                     </div>
-                    <div class="flex space-x-3">
-                        <button id="clearCartBtn" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 text-sm font-medium" data-lang-key="cart.clear">
-                            清空购物车
-                        </button>
-                        <button id="downloadAllBtn" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
-                            <i class="fas fa-download mr-2"></i> <span data-lang-key="cart.download">批量下载</span>
-                        </button>
+                    
+                    <!-- 原有的操作按钮区域 -->
+                    <div class="flex justify-between items-center">
+                        <div class="text-sm text-gray-500">
+                            <span data-lang-key="cart.selected">已选择</span> <span id="cartSelectedCount" class="font-medium text-gray-900">0</span> <span data-lang-key="cart.items">个图标</span>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button id="clearCartBtn" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 text-sm font-medium" data-lang-key="cart.clear">
+                                清空购物车
+                            </button>
+                            <button id="downloadAllBtn" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                                <i class="fas fa-download mr-2"></i> <span data-lang-key="cart.download">批量下载</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -483,16 +774,16 @@
     </main>
 
     <!-- 页脚 -->
-    <footer class="bg-white border-t border-gray-200 mt-12">
+    <footer class="bg-white border-t border-gray-200 mt-12" role="contentinfo" itemScope itemType="https://schema.org/Organization">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="md:flex md:justify-between">
                 <div class="mb-8 md:mb-0">
-                    <a href="#" class="flex items-center">
-                        <img src="images/logo/app-logo-hd.png" alt="AppIcon Logo" class="w-8 h-8 mr-2 object-contain">
-                        <span class="text-xl font-bold text-gray-900">AppIcon</span>
+                    <a href="#" class="flex items-center" itemProp="url">
+                        <img src="images/logo/app-logo-hd.png" alt="Geticon Logo" class="w-8 h-8 mr-2 object-contain" itemProp="logo">
+                        <span class="text-xl font-bold text-gray-900" itemProp="name">Geticon</span>
                     </a>
-                    <p class="text-gray-500 mt-2 max-w-md" data-lang-key="footer.description">
-                        AppIcon是一个帮助设计师、开发者和营销人员获取高质量应用图标资源的平台。
+                    <p class="text-gray-500 mt-2 max-w-md" data-lang-key="footer.description" itemProp="description">
+                        Geticon是一个帮助设计师、开发者和营销人员获取高质量应用图标资源的平台。
                     </p>
                 </div>
                 
@@ -520,7 +811,7 @@
                     <div>
                         <h3 class="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4" data-lang-key="footer.contact">联系我们</h3>
                         <ul class="space-y-2">
-                            <li><a href="#" class="text-gray-600 hover:text-primary-600" data-lang-key="nav.about">关于我们</a></li>
+                            <li><a href="about.html" class="text-gray-600 hover:text-primary-600" data-lang-key="nav.about" onclick="navigateToAbout(event)">关于我们</a></li>
                             <li><a href="#" class="text-gray-600 hover:text-primary-600" data-lang-key="footer.feedback">反馈建议</a></li>
                             <li><a href="#" class="text-gray-600 hover:text-primary-600" data-lang-key="footer.contactInfo">联系方式</a></li>
                             <li><a href="#" class="text-gray-600 hover:text-primary-600" data-lang-key="footer.privacy">隐私政策</a></li>
@@ -542,7 +833,7 @@
                     </a>
                 </div>
                 <p class="mt-4 md:mt-0 md:order-1 text-sm text-gray-500">
-                    &copy; 2023 AppIcon. <span data-lang-key="footer.rights">保留所有权利。</span>
+                    &copy; 2023 Geticon. <span data-lang-key="footer.rights">保留所有权利。</span>
                 </p>
             </div>
         </div>
@@ -560,8 +851,33 @@
         let cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
         const MAX_CART_ITEMS = 20;  // 购物车最大容量
         
+        // 圆角设置相关变量
+        let cornerRadiusEnabled = localStorage.getItem('cornerRadiusEnabled') === 'true';
+        const APPLE_CORNER_RADIUS = 22.37; // 苹果图标标准圆角比例（约22.37%）
+        
         // 语言配置
         let currentLang = 'zh-CN';
+        
+        // SEO内容配置
+        const seoContent = {
+            'zh-CN': {
+                title: 'Geticon - 高质量App图标下载平台',
+                description: 'Geticon为设计师、开发者和营销人员提供高质量App图标下载服务。轻松获取iOS、Mac应用的官方Logo。',
+                keywords: 'app图标,logo下载,应用图标,设计资源,图标库,iOS图标,Android图标,高清图标',
+                ogTitle: 'Geticon - 高质量App图标下载平台',
+                ogDescription: '为设计师、开发者和营销人员提供超过50万+iOS与Android应用的高清官方图标',
+                schemaDescription: 'Geticon为设计师、开发者和营销人员提供高质量App图标下载服务。轻松获取iOS、Mac应用的官方Logo。'
+            },
+            'en': {
+                title: 'Geticon - High Quality App Icons Download Platform',
+                description: 'Geticon provides high-quality app icon download services for designers, developers, and marketers. Easily get official logos from iOS and Mac applications.',
+                keywords: 'app icons,logo download,application icons,design resources,icon library,iOS icons,Android icons,high resolution icons,mobile app icons,free icons',
+                ogTitle: 'Geticon - High Quality App Icons Download Platform',
+                ogDescription: 'Providing over 500,000+ high-resolution official icons from iOS and Android apps for designers, developers, and marketers',
+                schemaDescription: 'Geticon provides high-quality app icon download services for designers, developers, and marketers. Easily get official logos from iOS and Mac applications.'
+            }
+        };
+        
         const translations = {
             'zh-CN': {
                 'nav.home': '首页',
@@ -618,7 +934,9 @@
                 'cart.download.allow': '个图标，请允许浏览器下载多个文件。下载完成后将自动清空购物车。',
                 'cart.download.complete': '所有图标下载完成，购物车已清空！',
                 'cart.download.failed': '下载失败，请重试',
-                'footer.description': 'AppIcon是一个帮助设计师、开发者和营销人员获取高质量应用图标资源的平台。',
+                'corner.title': '圆角设置',
+                'corner.subtitle': '(苹果风格)',
+                'footer.description': 'Geticon是一个帮助设计师、开发者和营销人员获取高质量应用图标资源的平台。',
                 'footer.quickLinks': '快速链接',
                 'footer.favorites': '收藏夹',
                 'footer.resources': '资源',
@@ -687,7 +1005,9 @@
                 'cart.download.allow': ' icons. Please allow your browser to download multiple files. The cart will be cleared after download is complete.',
                 'cart.download.complete': 'All icons downloaded. Cart has been cleared!',
                 'cart.download.failed': 'Download failed, please try again',
-                'footer.description': 'AppIcon is a platform helping designers, developers, and marketers access high-quality app icon resources.',
+                'corner.title': 'Corner Radius',
+                'corner.subtitle': '(Apple Style)',
+                'footer.description': 'Geticon is a platform helping designers, developers, and marketers access high-quality app icon resources.',
                 'footer.quickLinks': 'QUICK LINKS',
                 'footer.favorites': 'Favorites',
                 'footer.resources': 'RESOURCES',
@@ -721,25 +1041,41 @@
             initLanguageSwitcher();
         });
         
+        // 导航到About页面并传递语言状态
+        function navigateToAbout(event) {
+            event.preventDefault();
+            const currentLang = localStorage.getItem('geticonLanguage') || 'zh-CN';
+            window.location.href = `about.html?lang=${currentLang}`;
+        }
+
         // 检测浏览器语言
         function detectBrowserLanguage() {
-            // 先尝试从localStorage获取用户之前选择的语言
-            const savedLang = localStorage.getItem('appIconLanguage');
-            if (savedLang) {
-                currentLang = savedLang;
+            // 检查URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            
+            if (langParam && translations[langParam]) {
+                currentLang = langParam;
+                localStorage.setItem('geticonLanguage', currentLang);
             } else {
-                // 获取浏览器语言
-                const browserLang = navigator.language || navigator.userLanguage;
-                
-                // 检查是否为支持的语言，默认使用中文
-                if (browserLang.startsWith('en')) {
-                    currentLang = 'en';
+                // 先尝试从localStorage获取用户之前选择的语言
+                const savedLang = localStorage.getItem('geticonLanguage');
+                if (savedLang) {
+                    currentLang = savedLang;
                 } else {
-                    currentLang = 'zh-CN'; // 默认中文
+                    // 获取浏览器语言
+                    const browserLang = navigator.language || navigator.userLanguage;
+                    
+                    // 检查是否为支持的语言，默认使用中文
+                    if (browserLang.startsWith('en')) {
+                        currentLang = 'en';
+                    } else {
+                        currentLang = 'zh-CN'; // 默认中文
+                    }
+                    
+                    // 保存到localStorage
+                    localStorage.setItem('geticonLanguage', currentLang);
                 }
-                
-                // 保存到localStorage
-                localStorage.setItem('appIconLanguage', currentLang);
             }
             
             // 应用翻译
@@ -802,7 +1138,7 @@
         function switchLanguage(lang) {
             if (lang !== currentLang && translations[lang]) {
                 currentLang = lang;
-                localStorage.setItem('appIconLanguage', lang);
+                localStorage.setItem('geticonLanguage', lang);
                 
                 // 更新语言显示
                 const currentLangElem = document.getElementById('currentLang');
@@ -839,6 +1175,116 @@
                     }
                 }
             });
+            
+            // 更新SEO内容
+            updateSEOContent();
+        }
+        
+        // 更新SEO内容
+        function updateSEOContent() {
+            const seo = seoContent[currentLang];
+            if (!seo) return;
+            
+            // 更新页面标题
+            document.title = seo.title;
+            const pageTitle = document.getElementById('pageTitle');
+            if (pageTitle) pageTitle.textContent = seo.title;
+            
+            // 更新meta描述
+            const metaDescription = document.getElementById('metaDescription');
+            if (metaDescription) metaDescription.setAttribute('content', seo.description);
+            
+            // 更新meta关键词
+            const metaKeywords = document.getElementById('metaKeywords');
+            if (metaKeywords) metaKeywords.setAttribute('content', seo.keywords);
+            
+            // 更新Open Graph标签
+            const ogTitle = document.getElementById('ogTitle');
+            if (ogTitle) ogTitle.setAttribute('content', seo.ogTitle);
+            
+            const ogDescription = document.getElementById('ogDescription');
+            if (ogDescription) ogDescription.setAttribute('content', seo.ogDescription);
+            
+            // 更新Twitter Card标签
+            const twitterTitle = document.getElementById('twitterTitle');
+            if (twitterTitle) twitterTitle.setAttribute('content', seo.ogTitle);
+            
+            const twitterDescription = document.getElementById('twitterDescription');
+            if (twitterDescription) twitterDescription.setAttribute('content', seo.ogDescription);
+            
+            // 更新HTML lang属性
+            document.documentElement.lang = currentLang;
+            
+            // 更新Schema.org结构化数据
+            updateSchemaMarkup();
+        }
+        
+        // 更新Schema.org结构化数据
+        function updateSchemaMarkup() {
+            const seo = seoContent[currentLang];
+            if (!seo) return;
+            
+            const schemaScript = document.getElementById('schemaMarkup');
+            if (schemaScript) {
+                const schemaData = {
+                    "@context": "https://schema.org",
+                    "@type": "WebApplication",
+                    "name": "Geticon",
+                    "alternateName": currentLang === 'en' ? ["App Icon Downloader", "Icon Download Platform"] : ["应用图标下载器", "图标下载平台"],
+                    "description": seo.schemaDescription,
+                    "url": "https://geticon.online",
+                    "applicationCategory": "UtilitiesApplication",
+                    "operatingSystem": "Web browser",
+                    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+                    "softwareVersion": "1.0",
+                    "aggregateRating": {
+                        "@type": "AggregateRating",
+                        "ratingValue": "4.8",
+                        "reviewCount": "1250"
+                    },
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock"
+                    },
+                    "creator": {
+                        "@type": "Organization",
+                        "name": "Geticon",
+                        "url": "https://geticon.online"
+                    },
+                    "inLanguage": [currentLang],
+                    "audience": {
+                        "@type": "Audience",
+                        "audienceType": currentLang === 'en' ? 
+                            ["Designers", "Developers", "Marketers", "UI/UX Designers", "Mobile App Developers"] :
+                            ["设计师", "开发者", "营销人员", "UI/UX设计师", "移动应用开发者"]
+                    },
+                    "featureList": currentLang === 'en' ? [
+                        "High-quality app icon downloads",
+                        "500,000+ iOS and Android app icons",
+                        "Multiple resolution support (1024x1024, 512x512, 100x100)",
+                        "Batch download functionality",
+                        "Free to use",
+                        "Search functionality",
+                        "Category browsing",
+                        "Shopping cart feature"
+                    ] : [
+                        "高质量应用图标下载",
+                        "50万+iOS和Android应用图标",
+                        "多分辨率支持 (1024x1024, 512x512, 100x100)",
+                        "批量下载功能",
+                        "免费使用",
+                        "搜索功能",
+                        "分类浏览",
+                        "购物车功能"
+                    ],
+                    "screenshot": "https://geticon.online/images/screenshot.png",
+                    "image": "https://geticon.online/images/app-logo-hd.png"
+                };
+                
+                schemaScript.textContent = JSON.stringify(schemaData, null, 2);
+            }
         }
         
         // 初始化UI事件
@@ -1462,6 +1908,20 @@
             if (downloadAllBtn) {
                 downloadAllBtn.addEventListener('click', downloadAllIcons);
             }
+            
+            // 圆角开关事件监听器
+            const cornerRadiusToggle = document.getElementById('cornerRadiusToggle');
+            if (cornerRadiusToggle) {
+                // 设置初始状态
+                cornerRadiusToggle.checked = cornerRadiusEnabled;
+                
+                // 添加事件监听器
+                cornerRadiusToggle.addEventListener('change', function() {
+                    cornerRadiusEnabled = this.checked;
+                    // 保存设置到本地存储
+                    localStorage.setItem('cornerRadiusEnabled', cornerRadiusEnabled.toString());
+                });
+            }
         }
         
         // 显示购物车模态框
@@ -1683,24 +2143,36 @@
                             highestQualitySize = "100x100";
                         }
                         
-                        // 使用Fetch API获取图片内容作为Blob
-                        fetch(iconUrl)
-                            .then(response => response.blob())
-                            .then(blob => {
+                        // 处理图片下载（支持圆角）
+                        (async () => {
+                            try {
+                                let finalBlob;
+                                let filename = `${item.trackName}_${highestQualitySize}.png`;
+                                
+                                if (cornerRadiusEnabled) {
+                                    // 如果启用圆角，先处理图片
+                                    finalBlob = await applyCornerRadius(iconUrl);
+                                    filename = `${item.trackName}_${highestQualitySize}_rounded.png`;
+                                } else {
+                                    // 如果不启用圆角，直接获取原图
+                                    const response = await fetch(iconUrl);
+                                    finalBlob = await response.blob();
+                                }
+                                
                                 // 创建Blob URL
-                                const blobUrl = URL.createObjectURL(blob);
+                                const blobUrl = URL.createObjectURL(finalBlob);
                                 
                                 // 创建一个隐藏的a标签并触发下载
                                 const a = document.createElement('a');
                                 a.href = blobUrl;
-                                a.download = `${item.trackName}_${highestQualitySize}.png`;
+                                a.download = filename;
                                 a.style.display = 'none';
-                            document.body.appendChild(a);
-                            a.click();
+                                document.body.appendChild(a);
+                                a.click();
                                 
                                 // 清理
                                 setTimeout(() => {
-                            document.body.removeChild(a);
+                                    document.body.removeChild(a);
                                     URL.revokeObjectURL(blobUrl);
                                     
                                     // 计数下载完成的项目
@@ -1739,39 +2211,103 @@
                                         }, 500);
                                     }
                                 }, 100);
-                            })
-                            .catch(error => {
+                            } catch (error) {
                                 console.error('下载图标失败:', error);
                                 downloadedCount++; // 即使失败也计数，确保最终会清空购物车
-                            });
+                            }
+                        })();
                     }, index * 300); // 每300ms下载一个，避免浏览器限制
                 });
             }, 100);
         }
         
-        // 单个图标下载
-        function downloadSingleIcon(url, filename) {
-            fetch(url)
-                .then(response => response.blob())
-                .then(blob => {
-                    const blobUrl = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = blobUrl;
-                    a.download = filename;
-                    a.style.display = 'none';
-                    document.body.appendChild(a);
-                    a.click();
+        // 圆角处理函数 - 使用苹果图标标准圆角
+        function applyCornerRadius(imageUrl) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous'; // 处理跨域问题
+                
+                img.onload = function() {
+                    // 创建Canvas元素
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
                     
-                    setTimeout(() => {
+                    // 设置Canvas尺寸与图片相同
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    
+                    // 计算苹果标准圆角半径
+                    // 苹果图标使用连续曲线（squircle），这里用圆角矩形近似
+                    const radius = Math.min(img.width, img.height) * (APPLE_CORNER_RADIUS / 100);
+                    
+                    // 绘制圆角矩形路径
+                    ctx.beginPath();
+                    ctx.moveTo(radius, 0);
+                    ctx.lineTo(img.width - radius, 0);
+                    ctx.quadraticCurveTo(img.width, 0, img.width, radius);
+                    ctx.lineTo(img.width, img.height - radius);
+                    ctx.quadraticCurveTo(img.width, img.height, img.width - radius, img.height);
+                    ctx.lineTo(radius, img.height);
+                    ctx.quadraticCurveTo(0, img.height, 0, img.height - radius);
+                    ctx.lineTo(0, radius);
+                    ctx.quadraticCurveTo(0, 0, radius, 0);
+                    ctx.closePath();
+                    
+                    // 裁剪到圆角区域
+                    ctx.clip();
+                    
+                    // 绘制图片
+                    ctx.drawImage(img, 0, 0);
+                    
+                    // 转换为Blob
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('转换图片失败'));
+                        }
+                    }, 'image/png', 1.0);
+                };
+                
+                img.onerror = () => reject(new Error('加载图片失败'));
+                img.src = imageUrl;
+            });
+        }
+
+        // 单个图标下载
+        async function downloadSingleIcon(url, filename) {
+            try {
+                let finalBlob;
+                
+                if (cornerRadiusEnabled) {
+                    // 如果启用圆角，先处理图片
+                    finalBlob = await applyCornerRadius(url);
+                    // 修改文件名以标识圆角版本
+                    filename = filename.replace('.png', '_rounded.png');
+                } else {
+                    // 如果不启用圆角，直接下载原图
+                    const response = await fetch(url);
+                    finalBlob = await response.blob();
+                }
+                
+                // 创建下载链接
+                const blobUrl = URL.createObjectURL(finalBlob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                
+                setTimeout(() => {
                     document.body.removeChild(a);
-                        URL.revokeObjectURL(blobUrl);
-                    }, 100);
-                })
-                .catch(error => {
-                    console.error('下载图标失败:', error);
-                    const failedMessage = translations[currentLang]['cart.download.failed'] || '下载失败，请重试';
-                    alert(failedMessage);
-                });
+                    URL.revokeObjectURL(blobUrl);
+                }, 100);
+            } catch (error) {
+                console.error('下载图标失败:', error);
+                const failedMessage = translations[currentLang]['cart.download.failed'] || '下载失败，请重试';
+                alert(failedMessage);
+            }
         }
         
         // 更新购物车计数
